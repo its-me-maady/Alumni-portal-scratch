@@ -7,3 +7,4 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         "DATABASEURI"
     ) or "sqlite:///" + os.path.join(basedir, "main.db")
+    SECRET_KEY = os.environ.get("SECRET_KEY") or "You won't find"

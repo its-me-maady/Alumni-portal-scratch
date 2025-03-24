@@ -2,3 +2,4 @@
 *.db
 migrations/
 .flaskenv
+__pycache__/
