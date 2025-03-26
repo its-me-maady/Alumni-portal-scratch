@@ -3,3 +3,4 @@
 migrations/
 .flaskenv
 __pycache__/
+test/

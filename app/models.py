@@ -1,10 +1,11 @@
 from app import db, bcrypt
 from datetime import datetime
 
-
 user_event = db.Table(
     "user_event",
-    db.Column("user_id", db.Integer, db.ForeignKey("user.id"), primary_key=True),
+    db.Column(
+        "user_id", db.Integer, db.ForeignKey("user.register_no"), primary_key=True
+    ),
     db.Column("event_id", db.Integer, db.ForeignKey("event.id"), primary_key=True),
 )
 
@@ -26,7 +27,7 @@ class Admin(db.Model):
 
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(100))
     register_no = db.Column(db.Integer, primary_key=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
@@ -51,8 +52,11 @@ class User(db.Model):
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
 
+    def add_user(self, register_no, password):
+        pass
+
     def __repr__(self):
-        return f"User(Name = {self.name}, email = {self.email})"
+        return f"User(Name = {self.name}, email = {self.email}, reg no = {self.register_no})"
 
 
 class Event(db.Model):

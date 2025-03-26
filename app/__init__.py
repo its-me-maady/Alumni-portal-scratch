@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, session, request, Blueprint
+from flask import Flask, render_template, url_for, session, request, jsonify
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -6,7 +6,7 @@ from flask_bcrypt import Bcrypt
 
 app = Flask(__name__, template_folder="templates")
 app.config.from_object(Config)
-db = SQLAlchemy(app)
+db = SQLAlchemy(app, session_options={"autoflush": False})
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
