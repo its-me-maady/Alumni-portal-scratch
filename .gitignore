@@ -1,6 +1,6 @@
 .venv
 *.db
-migrations/
 .flaskenv
-__pycache__/
-test/
+migrations
+*.pyc
+test

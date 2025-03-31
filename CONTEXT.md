@@ -17,6 +17,7 @@ Alumni-portal-scratch/
 │   │   ├── base.html   # Base template
 │   │   └── login.html  # Login page
 │   ├── models.py       # Database models
+│   ├── utils.py        # Utility functions
 │   └── __init__.py     # App initialization
 ├── config.py           # Configuration settings
 ├── run.py             # Application entry point
@@ -36,6 +37,11 @@ Alumni-portal-scratch/
 
 -   **/login**: User authentication
 -   **/add_users**: Bulk user addition (admin)
+-   **/update_profile**: Allows users to update their profile information, including name, department, year of graduation, job position, and password.
+
+### Utilities
+
+-   **bulk_register_users(csv_path)**: A utility function in `utils.py` to register users in bulk from a CSV file.
 
 ### Database
 
