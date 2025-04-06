@@ -21,8 +21,7 @@ def login():
     Register_no = request.form["Register_no"]
     password = request.form["Password"]
 
-    # Check if this is an admin login attempt (assuming admin uses email as login)
-    if "@" in Register_no:  # Simple check for email format
+    if "@" in Register_no:
         query = db.select(Admin).where(Admin.email == Register_no)
         admin = db.session.scalar(query)
 
@@ -30,9 +29,12 @@ def login():
             session["user"] = None
             session["admin"] = admin.email
             flash("Welcome Admin! Login successful", "success")
-            return redirect(url_for("admin_dashboard"))  # Redirect to admin dashboard
+            return redirect(url_for("admin_dashboard"))
 
-    # Regular user login
+        else:
+            flash("Invalid credential", "danger")
+            return redirect(url_for("entry"))
+
     query = db.select(User).where(User.register_no == Register_no)
     user = db.session.scalar(query)
 
@@ -41,20 +43,27 @@ def login():
         session["admin"] = None
         return redirect(url_for("dash"))
 
+    else:
+        flash("Invalid credential", "danger")
+        return redirect(url_for("entry"))
+
     return redirect(url_for("entry"))
 
 
 @app.get("/logout")
 def logout():
-    session.pop("user", None)
-    session.pop("admin", None)
+    session["user"] = None
+    session["admin"] = None
     return redirect(url_for("entry"))
 
 
-@app.post("/saveprofile")
-def save_profile():
+@app.post("/mod_profile")
+def mod_profile():
     name = request.form["name"]
-    user = db.select().where(User.register_no == session["user"])
-    user.name = name
+    query = db.update(User).where(User.register_no == session["user"]).values(name=name)
+    db.session.execute(query)
+    db.session.commit()
+    query = db.select(User).where(User.register_no == session["user"])
+    print(db.session.scalar(query))
     flash("Added successfully", "success")
     return redirect(url_for("dash"))

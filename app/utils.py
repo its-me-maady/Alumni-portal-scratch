@@ -15,8 +15,7 @@ def bulk_register_users(csv_path):
     """
     try:
         df = pd.read_csv(csv_path, header=None)
-        data = list(zip(df[0], df[1]))  # Assuming columns: register_no, password
-
+        data = list(zip(df[0], df[1]))
         success_count = 0
         failure_count = 0
 

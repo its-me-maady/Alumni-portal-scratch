@@ -11,13 +11,15 @@
             <div class="nav-brand">Alumni Portal</div>
             <div class="nav-links">
                 {% if session.user %}
-                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
                 {% endif %}
                 {% if session.admin %}
-                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+                <a href="{{ url_for('events') }}">Events</a>
                 {% endif %}
             </div>
         </nav>
+        
         
         {% if get_flashed_messages() %}
         <div class="flash-messages">
