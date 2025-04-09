@@ -1,0 +1,67 @@
+/* Admin-specific styles */
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+#event-card {
+    width: 20rem;
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    flex-direction: column;
+    border-radius: 20px;
+}
+
+#event-card:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: 0.3s;
+}
+
+#event-card img {
+    width: 100%;
+}
+
+#event-add {
+    width: 20rem;
+    height: 20rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#event-add button {
+    width: 100px;
+    height: 100px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 100%;
+    font-size: 4.3rem;
+    cursor: pointer;
+}
+
+.event-add-pop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.event-form-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 500px;
+}

@@ -1,5 +1,7 @@
-from app import db, bcrypt
+from app import db, bcrypt, login
 from datetime import datetime
+from flask_login import UserMixin
+from flask import g
 
 user_event = db.Table(
     "user_event",
@@ -10,11 +12,9 @@ user_event = db.Table(
 )
 
 
-class Admin(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    email = db.Column(db.String(255), nullable=False, unique=True)
-    password = db.Column(db.String(255), nullable=False)
+class Admin(UserMixin, db.Model):
+    email = db.Column(db.String(255), primary_key=True)
+    password = db.Column(db.String(300), nullable=False)
 
     def set_password(self, password):
         self.password = bcrypt.generate_password_hash(password).decode("utf-8")
@@ -22,14 +22,13 @@ class Admin(db.Model):
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
 
-    def __repr__(self):
-        return f"Admin(id={self.id},email={self.email})"
+    def get_id(self):
+        return str(self.email)
 
 
-class User(db.Model):
-
+class User(UserMixin, db.Model):
     name = db.Column(db.String(100))
-    register_no = db.Column(db.Integer, primary_key=True, nullable=False)
+    register_no = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.String(255), nullable=False)
     job_position = db.Column(db.String(100))
     year = db.Column(db.Integer)
@@ -52,11 +51,11 @@ class User(db.Model):
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
 
+    def get_id(self):
+        return str(self.register_no)
+
     def add_user(self, register_no, password):
         pass
-
-    def __repr__(self):
-        return f"User(Name = {self.name}, email = {self.email}, reg no = {self.register_no})"
 
 
 class Event(db.Model):
@@ -64,7 +63,8 @@ class Event(db.Model):
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=False)
     expiry_date = db.Column(db.DateTime, nullable=False)
-    photos = db.Column(db.String(255))
+    poster = db.Column(db.String(255), nullable=False)
+    mime_type = db.Column(db.String(50), nullable=False)
     interested_users = db.relationship(
         "User",
         secondary=user_event,
@@ -74,3 +74,10 @@ class Event(db.Model):
 
     def is_expired(self):
         return datetime.utcnow() > self.expiry_date
+
+
+@login.user_loader
+def load_user(user_id):
+    if "@" in user_id:
+        return Admin.query.filter_by(email=user_id).first()
+    return User.query.filter_by(register_no=user_id).first()
