@@ -1,20 +1,18 @@
-{% extends "base.html" %} {% block title %}Dashboard{% endblock %} {% block body
-%} 
-<h1>{{ user.name }} </h1>
+{% extends "userbase.html" %} {% block title %}User-Dashboard{% endblock %} {%
+block body %}
+<h1>{{ user.name }}</h1>
 
 {% if (not user.name) %}
 <div class="popup-overlay" id="popupForm">
     <div class="popup-content">
         <h1>Please fill the details</h1>
-        <form action="{{ url_for('mod_profile') }}" method="post">
+        <form action="{{ url_for('user.mod_profile') }}" method="post">
             <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required />
             </div>
-
             <button type="submit" class="submit-btn">Submit</button>
         </form>
     </div>
 </div>
-{% endif %}
-{% endblock %}
+{% endif %} {% endblock %}

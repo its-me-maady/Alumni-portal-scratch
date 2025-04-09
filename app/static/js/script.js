@@ -13,25 +13,14 @@ function togglePassword() {
     }
 }
 
-window.onload = function () {
-    setTimeout(function () {
-        openPopup();
-    }, 500);
-};
 
 function openPopup() {
     document.getElementById("popupForm").style.display = "block";
     document.body.classList.add("no-scroll");
 }
+const navbarToggle = document.querySelector(".navbar-toggle");
+const navbarMenu = document.querySelector(".navbar-menu");
 
-function add_event() {
-    document.getElementById("eventPopup").style.display = "block";
-    document.body.classList.add("no-scroll");
-}
-
-function closeEventPopup() {
-    document.getElementById("eventPopup").style.display = "none";
-    document.body.classList.remove("no-scroll");
-}
-
-
+navbarToggle.addEventListener("click", () => {
+    navbarMenu.classList.toggle("active");
+});

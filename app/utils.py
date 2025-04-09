@@ -4,15 +4,6 @@ from app import db
 
 
 def bulk_register_users(csv_path):
-    """
-    Registers users in bulk from a CSV file.
-
-    Args:
-        csv_path (str): Path to the CSV file containing user data.
-
-    Returns:
-        dict: A summary of the operation with counts of successes and failures.
-    """
     try:
         df = pd.read_csv(csv_path, header=None)
         data = list(zip(df[0], df[1]))
