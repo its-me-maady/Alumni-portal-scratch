@@ -26,6 +26,11 @@ app.register_blueprint(admin, url_prefix="/admin")
 app.register_blueprint(user, url_prefix="/user")
 
 
+@app.template_filter("datetime")
+def format_datetime(value):
+    return value.strftime("%b %d, %Y")
+
+
 @app.route("/")
 def index():
     return redirect(url_for("user.loginpg"))

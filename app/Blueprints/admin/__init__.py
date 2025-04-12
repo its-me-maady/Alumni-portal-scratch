@@ -71,7 +71,7 @@ def add_users():
     result = bulk_register_users(csv_path)
 
     if "error" in result:
-        flash(result, "Danger")
+        flash(result, "danger")
         return redirect(url_for("admin.dashboard"))
 
     flash(result, "success")

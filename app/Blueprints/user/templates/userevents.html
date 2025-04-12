@@ -1,28 +1,56 @@
 {% extends 'userbase.html' %} {% block body %}
 <div class="card-container">
     {% for event in events %}
-    <div
-        class="card"
-        id="event-card"
-        
+     <div
+        id="event-box"
+        onclick="showEventDetails(this)"
+        data-title="{{event.title}}"
+        data-description="{{event.description}}"
+        data-date="{{event.expiry_date|datetime}}"
+        data-image="{{ url_for('user.event', event_id=event.id) }}"
     >
-        <div class="event-img-container">
-            <img
-                src="{{ url_for('user.event', event_id=event.id) }}"
-                class="card-img-top"
-                alt="..."
-            />
-        </div>
-        <div class="card-body">
-            <h2 class="card-title">{{event.title}}</h2>
-            <p class="card-text">{{event.date}}</p>
-            <a
-                href=""
-                class="btn btn-primary"
-                >Intersted</a
-            >
+        <div class="card" id="event-card">
+            <div class="event-img-container">
+                <img
+                    src="{{ url_for('user.event', event_id=event.id) }}"
+                    class="card-img-top"
+                    alt="..."
+                />
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">{{event.title}}</h2>
+                <p class="card-text">{{event.expiry_date|datetime}}</p>
+                <a
+                    href=""
+                    class="btn btn-primary"
+                    >Intersted</a
+                >
+            </div>
         </div>
     </div>
     {% endfor %}
+</div>
+<div class="event-details" id="event-details">
+    <div class="event-details-container">
+        <h1>Event Details</h1>
+        <div class="event-details-content">
+            <img
+                src=""
+                alt="Event Image"
+                id="event-image"
+                class="event-image"
+            />
+            <h2 id="event-title"></h2>
+            <p id="event-description"></p>
+            <p id="event-date"></p>
+            <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="closeEventDetails()"
+            >
+                Close
+            </button>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -27,3 +27,22 @@ const navbarMenu = document.querySelector(".navbar-menu");
 navbarToggle.addEventListener("click", () => {
     navbarMenu.classList.toggle("active");
 });
+
+function showEventDetails(eventId) {
+    const eventDetails = document.getElementById("event-details");
+    document.getElementById("event-title").textContent =
+        eventId.getAttribute("data-title");
+    document.getElementById("event-image").src =
+        eventId.getAttribute("data-image");
+    document.getElementById("event-description").textContent =
+        eventId.getAttribute("data-description");
+    document.getElementById("event-date").textContent =
+        eventId.getAttribute("data-date");
+    eventDetails.style.display = "block";
+    document.body.classList.add("no-scroll");
+}
+function closeEventDetails() {
+    const eventDetails = document.getElementById("event-details");
+    eventDetails.style.display = "none";
+    document.body.classList.remove("no-scroll");
+}
