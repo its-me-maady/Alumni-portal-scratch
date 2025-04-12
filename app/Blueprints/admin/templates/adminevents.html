@@ -1,31 +1,41 @@
 {% extends 'adminbase.html' %} {% block body %}
 <div class="card-container">
     {% for event in events %}
-    <div
-        id="event-box"
-        onclick="showEventDetails(this)"
-        data-title="{{event.title}}"
-        data-description="{{event.description}}"
-        data-date="{{event.expiry_date|datetime}}"
-        data-image="{{ url_for('admin.event', event_id=event.id) }}"
-    >
-        <div class="card" id="event-card">
-            <div class="event-img-container">
-                <img
-                    src="{{ url_for('admin.event', event_id=event.id) }}"
-                    class="card-img-top"
-                    alt="..."
-                />
-            </div>
-            <div class="card-body">
-                <h2 class="card-title">{{event.title}}</h2>
-                <p class="card-text">{{event.expiry_date|datetime}}</p>
-                <a
-                    href="{{ url_for('admin.delete_event',event_id=event.id) }}"
-                    class="btn btn-primary"
-                    >Delete event</a
-                >
-            </div>
+
+    <div class="card" id="event-card">
+        <div class="event-img-container">
+            <img
+                src="{{ url_for('admin.event', event_id=event.id) }}"
+                class="card-img-top"
+                alt="..."
+            />
+        </div>
+        <div class="card-body">
+            <h2 class="card-title">{{event.title}}</h2>
+            <p class="card-text">{{event.expiry_date|datetime}}</p>
+            <a
+                href="{{ url_for('admin.delete_event',event_id=event.id) }}"
+                class="btn btn-primary"
+                >Delete event</a
+            >
+            <button
+                class="edit-btn"
+                onclick="openEventEdit(this)"
+                data-title="{{event.title}}"
+                data-description="{{event.description}}"
+                data-date="{{event.expiry_date|time}}"
+            >
+                <i class="fas fa-edit"></i>
+            </button>
+            <a
+            class="btn btn-primary"
+                id="event-box"
+                onclick="showEventDetails(this)"
+                data-title="{{event.title}}"
+                data-description="{{event.description}}"
+                data-date="{{event.expiry_date|datetime}}"
+                data-image="{{ url_for('admin.event', event_id=event.id) }}"
+            >View details</a>
         </div>
     </div>
     {% endfor %}
@@ -121,6 +131,69 @@
                 Close
             </button>
         </div>
+    </div>
+</div>
+<div class="event-form-container" id="event-edit" style="display: none">
+    <h1>Event Edit</h1>
+    <div class="event-edit-content">
+        <form action="" id="event-edit-form">
+            {{ form.hidden_tag() }}
+            <div class="input-group my-3">
+                {{ form.poster.label(class="input-group-text") }} {{
+                form.poster(class="form-control") }} {% if form.poster.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.poster.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.title.label(class="form-label") }}
+                {{ form.title(class="form-control",id="event-edit-title") }} {% if form.title.errors
+                %}
+                <div class="alert alert-danger">
+                    {% for error in form.title.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.description.label(class="form-label" ) }} {{
+                form.description(class="form-control",id
+                ="event-edit-description") }} {% if
+                form.description.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.description.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.date.label(class="form-label") }}
+                {{ form.date(class="form-control",id ="event-edit-date") }} {% if form.date.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.date.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            {{ form.submit(class="btn btn-primary") }}
+            <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="closeEventEdit()"
+            >
+                Close
+            </button>
+        </form>
     </div>
 </div>
 {% endblock %}

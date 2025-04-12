@@ -1,31 +1,36 @@
 {% extends 'userbase.html' %} {% block body %}
+
 <div class="card-container">
     {% for event in events %}
-     <div
-        id="event-box"
-        onclick="showEventDetails(this)"
-        data-title="{{event.title}}"
-        data-description="{{event.description}}"
-        data-date="{{event.expiry_date|datetime}}"
-        data-image="{{ url_for('user.event', event_id=event.id) }}"
-    >
-        <div class="card" id="event-card">
-            <div class="event-img-container">
-                <img
-                    src="{{ url_for('user.event', event_id=event.id) }}"
-                    class="card-img-top"
-                    alt="..."
-                />
-            </div>
-            <div class="card-body">
-                <h2 class="card-title">{{event.title}}</h2>
-                <p class="card-text">{{event.expiry_date|datetime}}</p>
-                <a
-                    href=""
-                    class="btn btn-primary"
-                    >Intersted</a
-                >
-            </div>
+    <div class="card" id="event-card">
+        <div class="event-img-container">
+            <img
+                src="{{ url_for('user.event', event_id=event.id) }}"
+                class="card-img-top"
+                alt="..."
+            />
+        </div>
+        <div class="card-body">
+            <h2 class="card-title">{{event.title}}</h2>
+            <p class="card-text">{{event.expiry_date|datetime}}</p>
+            <a
+                href="{{ url_for('user.event_interested', event_id=event.id) }}"
+                class="btn btn-primary"
+                >{% if event in user.interested_events %}
+                Not Interested
+                {% else %}
+                Interested
+                {% endif %}</a
+            ><a
+                class="btn btn-primary mx-2"
+                id="event-box"
+                onclick="showEventDetails(this)"
+                data-title="{{event.title}}"
+                data-description="{{event.description}}"
+                data-date="{{event.expiry_date|datetime}}"
+                data-image="{{ url_for('user.event', event_id=event.id) }}"
+                >Details
+            </a>
         </div>
     </div>
     {% endfor %}

@@ -58,3 +58,31 @@
     width: 90%;
     max-width: 500px;
 }
+
+.edit-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.edit-btn:hover {
+    background: var(--hover-primary);
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px var(--hover-shadow);
+}
+
+.edit-btn i {
+    font-size: 1.2rem;
+}

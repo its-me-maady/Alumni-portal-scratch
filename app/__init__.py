@@ -31,6 +31,11 @@ def format_datetime(value):
     return value.strftime("%b %d, %Y")
 
 
+@app.template_filter("time")
+def format_time(value):
+    return value.strftime("%Y-%m-%d")
+
+
 @app.route("/")
 def index():
     return redirect(url_for("user.loginpg"))

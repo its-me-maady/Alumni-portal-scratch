@@ -115,3 +115,19 @@ def events():
 def event(event_id):
     event = Event.query.get_or_404(event_id)
     return Response(event.poster, mimetype=event.mime_type)
+
+
+@user.get("/event-intersted/<int:event_id>")
+@login_required
+@user_required
+def event_interested(event_id):
+    event = Event.query.get_or_404(event_id)
+    if event in current_user.interested_events:
+        current_user.interested_events.remove(event)
+        db.session.commit()
+        flash("Removed from interested events", "success")
+    else:
+        current_user.interested_events.append(event)
+        db.session.commit()
+        flash("Added to interested events", "success")
+    return redirect(url_for("user.events"))
