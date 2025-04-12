@@ -13,12 +13,20 @@
             {{ form.hidden_tag() }}
             <div class="form-group">
                 {{ form.userid.label(class="form-lable") }}
-                {{form.userid(class="form-control") }}
+                {{form.userid(class="form-control") }} {% if form.userid.errors
+                %}
+                <div class="alert alert-danger">
+                    {% for error in form.userid.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
+
             <div class="form-group">
                 {{ form.password.label(class="form-lable") }}
-                <div class="password-container">
-                    {{form.password(class="form-control",id="loginpass") }}
+                <div class="password-container" data-tooltip="If first time Enter your D.O.B in dd/mm/yyyy format">
+                    {{form.password(class="form-control", id="loginpass") }}
                     <button
                         type="button"
                         class="show-password-btn"
@@ -27,7 +35,16 @@
                         <i class="far fa-eye" id="togglePassword"></i>
                     </button>
                 </div>
+                    
+                {% if form.password.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.password.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
+
             {{form.submit(class="login-btn")}}
         </form>
     </div>

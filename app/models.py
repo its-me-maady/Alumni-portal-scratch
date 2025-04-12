@@ -35,7 +35,8 @@ class User(UserMixin, db.Model):
     dept = db.Column(db.String(100))
     email = db.Column(db.String(120), unique=True)
     whatsapp_no = db.Column(db.String(20), unique=True)
-    photo = db.Column(db.String(255))
+    porfile = db.Column(db.String(255))
+    mime_type = db.Column(db.String(50))
     date_active = db.Column(db.DateTime, default=datetime.utcnow)
     active_hours = db.Column(db.String(50))
     interested_events = db.relationship(
