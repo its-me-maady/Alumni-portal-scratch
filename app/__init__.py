@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, g
+from flask import Flask, redirect, url_for
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -24,12 +24,6 @@ from app.Blueprints.user import user
 
 app.register_blueprint(admin, url_prefix="/admin")
 app.register_blueprint(user, url_prefix="/user")
-
-
-@app.after_request
-def after_request(response):
-    g.is_admin_route = False
-    return response
 
 
 @app.route("/")

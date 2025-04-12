@@ -13,11 +13,14 @@ function togglePassword() {
     }
 }
 
-
 function openPopup() {
-    document.getElementById("popupForm").style.display = "block";
-    document.body.classList.add("no-scroll");
+    const popupForm = document.getElementById("popupForm");
+    if (popupForm) {
+        popupForm.style.display = "block";
+        document.body.classList.add("no-scroll");
+    }
 }
+
 const navbarToggle = document.querySelector(".navbar-toggle");
 const navbarMenu = document.querySelector(".navbar-menu");
 

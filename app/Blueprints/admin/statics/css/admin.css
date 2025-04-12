@@ -1,28 +1,26 @@
 /* Admin-specific styles */
-.card-container {
+
+#event-add button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
+    font-size: 4.3rem;
+    cursor: pointer;
+    line-height: 1;
+    padding-bottom: 0.2rem;
+    transition: all 0.4s ease;
 }
 
-#event-card {
-    width: 20rem;
-    border: 1px solid var(--border-color);
-    padding: 20px;
-    flex-direction: column;
-    border-radius: 20px;
-}
-
-#event-card:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    transition: 0.3s;
-}
-
-#event-card img {
-    width: 100%;
-}
 
 #event-add {
     width: 20rem;
@@ -30,17 +28,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative; /* Add this */
 }
 
-#event-add button {
-    width: 100px;
-    height: 100px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 100%;
-    font-size: 4.3rem;
-    cursor: pointer;
+#event-add button:hover {
+    background-color: var(--hover-primary);
+    transform: translate(-50%, -50%) rotate(90deg) scale(1.1);
+    box-shadow: 0 5px 15px var(--hover-shadow);
 }
 
 .event-add-pop {
@@ -50,12 +44,12 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: var(--shadow-color);
     z-index: 1000;
 }
 
 .event-form-container {
-    background: white;
+    background: var(--white);
     padding: 2rem;
     border-radius: 8px;
     position: absolute;
