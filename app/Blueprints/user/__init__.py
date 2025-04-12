@@ -13,7 +13,7 @@ from functools import wraps
 from flask_login import login_user, current_user, logout_user, login_required
 from app.models import User, Event
 from app.forms import LoginFrom, ContactForm
-from datetime import timedeltav
+from datetime import timedelta
 
 user = Blueprint(
     "user",
