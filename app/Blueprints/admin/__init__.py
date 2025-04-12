@@ -144,12 +144,6 @@ def edit_event(event_id):
         flash("Event not found", "danger")
         return redirect(url_for("admin.dashboard"))
     form = EventFrom()
-    print(
-        form.title.data,
-        form.description.data,
-        form.date.data,
-        form.validate_on_submit(),
-    )
     if form.validate_on_submit():
         event.title = form.title.data
         event.description = form.description.data
