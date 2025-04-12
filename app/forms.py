@@ -9,7 +9,8 @@ from wtforms import (
     IntegerField,
     SelectField,
 )
-from wtforms.validators import DataRequired, Email
+from wtforms.validators import DataRequired, Email, Optional
+from flask_wtf.file import FileAllowed
 
 
 class LoginFrom(FlaskForm):
@@ -22,7 +23,13 @@ class EventFrom(FlaskForm):
     title = StringField("Event Title", validators=[DataRequired()])
     description = TextAreaField("Event Desciption", validators=[DataRequired()])
     date = DateField("Event Date", validators=[DataRequired()])
-    poster = FileField("Event Poster", validators=[DataRequired()])
+    poster = FileField(
+        "Event Poster",
+        validators=[
+            FileAllowed(["jpg", "png", "jpeg", "webp"], "Images only!"),
+            Optional(),
+        ],
+    )
     submit = SubmitField("Submit Event", validators=[DataRequired()])
 
 

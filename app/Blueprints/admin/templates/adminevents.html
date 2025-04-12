@@ -22,6 +22,7 @@
                 class="edit-btn"
                 onclick="openEventEdit(this)"
                 data-title="{{event.title}}"
+                data-id="{{event.id}}"
                 data-description="{{event.description}}"
                 data-date="{{event.expiry_date|time}}"
             >
@@ -43,7 +44,6 @@
         <button onclick="openEventPopup()">+</button>
     </div>
 </div>
-
 <div class="event-add-pop" id="eventAddPopup">
     <div class="event-form-container">
         <h1>Add New Event</h1>
@@ -136,53 +136,27 @@
 <div class="event-form-container" id="event-edit" style="display: none">
     <h1>Event Edit</h1>
     <div class="event-edit-content">
-        <form action="" id="event-edit-form">
+        <form action="" id="event-edit-form" method="post" enctype="multipart/form-data" nonvalidate>
             {{ form.hidden_tag() }}
             <div class="input-group my-3">
                 {{ form.poster.label(class="input-group-text") }} {{
-                form.poster(class="form-control") }} {% if form.poster.errors %}
-                <div class="alert alert-danger">
-                    {% for error in form.poster.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% endif %}
+                form.poster(class="form-control",id="event-edit-img") }}
             </div>
 
             <div class="form-group">
                 {{ form.title.label(class="form-label") }}
-                {{ form.title(class="form-control",id="event-edit-title") }} {% if form.title.errors
-                %}
-                <div class="alert alert-danger">
-                    {% for error in form.title.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% endif %}
+                {{ form.title(class="form-control",id="event-edit-title") }} 
             </div>
 
             <div class="form-group">
                 {{ form.description.label(class="form-label" ) }} {{
                 form.description(class="form-control",id
-                ="event-edit-description") }} {% if
-                form.description.errors %}
-                <div class="alert alert-danger">
-                    {% for error in form.description.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% endif %}
+                ="event-edit-description") }}
             </div>
 
             <div class="form-group">
                 {{ form.date.label(class="form-label") }}
-                {{ form.date(class="form-control",id ="event-edit-date") }} {% if form.date.errors %}
-                <div class="alert alert-danger">
-                    {% for error in form.date.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% endif %}
+                {{ form.date(class="form-control",id ="event-edit-date") }} 
             </div>
 
             {{ form.submit(class="btn btn-primary") }}

@@ -135,7 +135,7 @@ def delete_event(event_id):
     return redirect(url_for("admin.dashboard"))
 
 
-@admin.get("edit-event/<int:event_id>")
+@admin.post("event-edit/<int:event_id>")
 @login_required
 @admin_required
 def edit_event(event_id):
@@ -144,16 +144,27 @@ def edit_event(event_id):
         flash("Event not found", "danger")
         return redirect(url_for("admin.dashboard"))
     form = EventFrom()
+    print(
+        form.title.data,
+        form.description.data,
+        form.date.data,
+        form.validate_on_submit(),
+    )
     if form.validate_on_submit():
         event.title = form.title.data
         event.description = form.description.data
         event.expiry_date = form.date.data
-        event.poster = form.poster.data.read()
-        event.mime_type = form.poster.data.mimetype
+        print(form.poster.data)
+        if form.poster.data:
+            event.poster = form.poster.data.read()
+            event.mime_type = form.poster.data.mimetype
+        else:
+            event.poster = event.poster
+            event.mime_type = event.mime_type
         db.session.commit()
         flash("Event updated successfully", "success")
         return redirect(url_for("admin.dashboard"))
-    return render_template("adminevent.html", user=current_user, form=form, event=event)
+    return redirect(url_for("admin.dashboard"))
 
 
 @admin.route("/logout")

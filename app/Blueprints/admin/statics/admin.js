@@ -15,7 +15,8 @@ function openEventEdit(eventId) {
         eventId.getAttribute("data-description");
     document.getElementById("event-edit-date").value =
         eventId.getAttribute("data-date");
-    console.log(eventId.getAttribute("data-date"));
+    document.getElementById("event-edit-form").action =
+        "/admin/event-edit/" + eventId.getAttribute("data-id");
     document.getElementById("event-edit").style.display = "block";
     document.body.classList.add("no-scroll");
 }
