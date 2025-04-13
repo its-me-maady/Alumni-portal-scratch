@@ -9,3 +9,4 @@ class Config:
     ) or "sqlite:///" + os.path.join(basedir, "main.db")
     SECRET_KEY = os.environ.get("SECRET_KEY") or "You won't find"
     USE_SESSION_FOR_NEXT = True
+    WTF_CSRF_ENABLED = True

@@ -37,7 +37,7 @@ class ContactForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
     password = PasswordField("New Password", validators=[DataRequired()])
     job = StringField("Current Job")
-    location = StringField("Location", validators=[Optional()])
+    location = StringField("Location", validators=[DataRequired()])
     dept = SelectField(
         "Department",
         choices=[
@@ -70,7 +70,6 @@ class ContactForm(FlaskForm):
         "Profile pic",
         validators=[
             FileAllowed(["jpg", "png", "jpeg", "webp"], "Images only!"),
-            Optional(),
         ],
     )
     submit = SubmitField("Submit")

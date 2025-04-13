@@ -175,6 +175,42 @@ def add_users():
     return redirect(url_for("admin.dashboard"))
 
 
+@admin.route("/bulk_actions", methods=["POST"])
+@login_required
+@admin_required
+def bulk_actions():
+    selected_users = request.form.getlist("selected_users[]")
+    action = request.form.get("action")
+
+    if not selected_users:
+        flash("No users selected", "error")
+        return redirect(url_for("admin.dashboard"))
+
+    for user_id in selected_users:
+        user = User.query.filter_by(register_no=user_id).first()
+        if user:
+            if action == "approve":
+                user.approved = True
+            elif action == "reject":
+                user.approved = False
+
+    db.session.commit()
+    flash(f"Successfully {action}d {len(selected_users)} users", "success")
+    return redirect(url_for("admin.dashboard"))
+
+
+@admin.get("/delete-all")
+@login_required
+@admin_required
+def delete():
+    users = User.query.all()
+    for user in users:
+        db.session.delete(user)
+    db.session.commit()
+    flash("All users deleted successfully", "success")
+    return redirect(url_for("admin.dashboard"))
+
+
 @admin.post("/add_event")
 @login_required
 @admin_required

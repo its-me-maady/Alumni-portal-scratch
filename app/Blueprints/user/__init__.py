@@ -43,8 +43,10 @@ def dash():
     form = ContactForm()
     if not current_user.is_authenticated:
         return redirect(url_for("user.loginpg"))
-    if current_user.name == None:
-        return render_template("usercontact.html", user=current_user, form=form)
+    for i in current_user:
+        if i == None:
+            flash("Please fill your details", "danger")
+            return render_template("usercontact.html", user=current_user, form=form)
     return render_template("userdashboard.html", user=current_user)
 
 
@@ -52,6 +54,13 @@ def dash():
 @user.route("/login", methods=["GET", "POST"])
 def loginpg():
     form = LoginFrom()
+    if current_user.is_authenticated:
+        if isinstance(current_user, User):
+            flash("You are already logged in", "danger")
+            return redirect(url_for("user.dash"))
+        else:
+            flash("You are already logged in as admin", "danger")
+            return redirect(url_for("admin.dashboard"))
 
     if form.validate_on_submit():
         if form.userid.data.isnumeric():
@@ -99,13 +108,13 @@ def logout():
 @user_required
 def mod_profile():
     form = ContactForm()
-    if form.validate_on_submit:
+    if form.validate_on_submit():
         current_user.name = form.name.data
         current_user.email = form.email.data
         current_user.job = form.job.data
         current_user.dept = form.dept.data
         current_user.location = form.location.data
-        current_user.job_status = form.job_status.data
+        current_user.employment_status = form.job_status.data
         current_user.year = form.year.data
         current_user.whatsapp_no = form.whatsapp_no.data
         current_user.profile = form.profile.data
@@ -116,7 +125,7 @@ def mod_profile():
         return redirect(url_for("user.dash"))
 
     flash("Please fill correctly", "danger")
-    return redirect(url_for("user.dash"))
+    return render_template("usercontact.html", user=current_user, form=form)
 
 
 @user.get("/events")

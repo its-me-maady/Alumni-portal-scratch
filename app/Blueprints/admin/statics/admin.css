@@ -132,10 +132,102 @@
     margin-top: 30px;
 }
 
+.select-checkbox {
+    margin-right: 15px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+/* Bulk Actions Styling */
+.bulk-actions {
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.alumni-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.alumni-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.alumni-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.alumni-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 10px;
+}
+
+.location {
+    font-size: 0.9rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.alumni-contact {
+    font-size: 0.9rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.action-buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.alumni-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border: 2px solid #0d6efd;
+    margin-top: 5px;
+}
+
+.alumni-checkbox:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.alumni-checkbox:hover {
+    border-color: #0a58ca;
+}
+
+.bulk-actions {
+    display: flex;
+    align-items: center;
+}
+
 .alumni-card {
     background: #fff;
     border-radius: 8px;
-    padding: 20px;
+    padding: 1.5rem;
     margin-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     border: 1px solid #eee;
@@ -143,7 +235,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem;
 }
 
 .alumni-card:hover {
@@ -234,4 +325,20 @@
 .btn-approve:hover, .btn-reject:hover {
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.alumni-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border: 2px solid #0d6efd;
+}
+
+.alumni-checkbox:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.alumni-checkbox:hover {
+    border-color: #0a58ca;
 }

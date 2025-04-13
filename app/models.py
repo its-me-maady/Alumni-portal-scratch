@@ -37,7 +37,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), unique=True)
     location = db.Column(db.String(120))
     whatsapp_no = db.Column(db.Integer)
-    porfile = db.Column(db.String(255))
+    profile = db.Column(db.String(255))
     mime_type = db.Column(db.String(50))
     approved = db.Column(db.Boolean, default=False)
     last_login = db.Column(db.DateTime, default=datetime.utcnow)
@@ -57,6 +57,21 @@ class User(UserMixin, db.Model):
 
     def get_id(self):
         return str(self.register_no)
+
+    def __iter__(self):
+        lst = [
+            "name",
+            "register_no",
+            "employment_status",
+            "year",
+            "dept",
+            "email",
+            "location",
+            "whatsapp_no",
+            "profile",
+        ]
+        for attr in lst:
+            yield getattr(self, attr)
 
 
 class Event(db.Model):

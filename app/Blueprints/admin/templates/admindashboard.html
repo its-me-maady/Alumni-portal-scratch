@@ -19,7 +19,7 @@
                     type="text"
                     class="form-control"
                     name="query"
-                    placeholder="Search by name, email, or registration number..."
+                    placeholder="Search by Name, Email, or Registration Number..."
                 />
             </div>
 
@@ -97,48 +97,57 @@
 
     <div class="search-results mt-4">
         {% if users %}
-            {% for alumni in users %}
-            <div class="alumni-card">
-                <div class="alumni-info">
-                    <div class="alumni-primary">
-                        <h2>{{alumni.name or 'Unnamed Alumni'}}</h2>
-                        <span class="reg-no">{{alumni.register_no}}</span>
-                    </div>
-                    <div class="alumni-details">
-                        {% if alumni.dept %}
-                        <span class="badge bg-info">{{alumni.dept}}</span>
-                        {% endif %}
-                        {% if alumni.year %}
-                        <span class="badge bg-secondary">{{alumni.year}} Batch</span>
-                        {% endif %}
-                        {% if alumni.employment_status %}
-                        <span class="badge bg-success">{{alumni.employment_status}}</span>
-                        {% endif %}
-                        {% if alumni.location %}
-                        <span class="location"><i class="fas fa-map-marker-alt"></i> {{alumni.location}}</span>
-                        {% endif %}
-                    </div>
-                    {% if alumni.email %}
-                    <div class="alumni-contact">
-                        <i class="fas fa-envelope"></i> {{alumni.email}}
-                    </div>
-                    {% endif %}
+            <div class="bulk-actions mb-4 d-flex justify-content-between align-items-center">
+                <div>
+                    <button type="button" class="btn btn-outline-primary" id="selectAll">Select All</button>
+                    <button type="button" class="btn btn-outline-secondary ms-2" id="deselectAll">Deselect All</button>
                 </div>
-                <div class="action-buttons">
-                    {% if alumni.approved %}
-                    <a href="{{url_for('admin.reject_user',id=alumni.register_no)}}" 
-                       class="btn btn-reject">
-                        <i class="fas fa-times-circle mr-1"></i> Reject
-                    </a>
-                    {% else %}
-                    <a href="{{url_for('admin.approve_user',id=alumni.register_no)}}" 
-                       class="btn btn-approve">
-                        <i class="fas fa-check-circle mr-1"></i> Approve
-                    </a>
-                    {% endif %}
+                <div>
+                    <button type="button" class="btn btn-success" id="bulkApprove">Approve Selected</button>
+                    <button type="button" class="btn btn-danger ms-2" id="bulkReject">Reject Selected</button>
                 </div>
             </div>
-            {% endfor %}
+            <form id="bulkActionForm" method="post" action="{{url_for('admin.bulk_actions')}}">
+                <div class="row">
+                    {% for alumni in users %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="alumni-card">
+                            <div class="d-flex align-items-start">
+                                <input type="checkbox" name="selected_users[]" value="{{alumni.register_no}}" class="form-check-input alumni-checkbox me-3">
+                                <div class="alumni-info">
+                                    <h5 class="alumni-name mb-1">{{alumni.name or 'Unnamed Alumni'}}</h5>
+                                    <p class="text-muted mb-2"><small>{{alumni.register_no}}</small></p>
+                                    <div class="alumni-details">
+                                        {% if alumni.dept %}
+                                        <span class="badge bg-info">{{alumni.dept}}</span>
+                                        {% endif %}
+                                        {% if alumni.year %}
+                                        <span class="badge bg-secondary">{{alumni.year}} Batch</span>
+                                        {% endif %}
+                                        {% if alumni.employment_status %}
+                                        <span class="badge bg-success">{{alumni.employment_status}}</span>
+                                        {% endif %}
+                                        {% if alumni.location %}
+                                        <span class="location text-muted"><i class="fas fa-map-marker-alt"></i> {{alumni.location}}</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if alumni.email %}
+                                    <p class="alumni-contact mt-2"><i class="fas fa-envelope"></i> {{alumni.email}}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="action-buttons mt-3">
+                                {% if alumni.approved %}
+                                <span class="badge bg-success">Approved</span>
+                                {% else %}
+                                <span class="badge bg-warning">Pending</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </form>
         {% else %}
             <div class="text-center text-muted mt-5">
                 <i class="fas fa-search fa-3x mb-3"></i>
@@ -147,4 +156,5 @@
         {% endif %}
     </div>
 </div>
+
 {% endblock %}
