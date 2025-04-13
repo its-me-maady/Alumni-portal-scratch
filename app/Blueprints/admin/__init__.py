@@ -52,10 +52,27 @@ def login():
     return redirect(url_for("user.loginpg"))
 
 
-@admin.get("/dash")
+@admin.get("/dashboard")
 @login_required
 @admin_required
 def dashboard():
+    temp = session["users"] if "users" in session else None
+    session["users"] = None
+    if temp is None:
+        users = User.query.all()
+        return render_template("admindashboard.html", user=current_user, users=users)
+    users = []
+    for user in [temp[f"{i}"] for i in range(len(temp))]:
+        user = User.query.filter_by(register_no=user).first()
+        users.append(user)
+    return render_template("admindashboard.html", user=current_user, users=users)
+
+
+@admin.get("/events")
+@login_required
+@admin_required
+def events():
+
     form = EventFrom()
     events = Event.query.all()
     return render_template(
@@ -63,9 +80,89 @@ def dashboard():
     )
 
 
-@admin.get("/add_users")
-@admin_required
+@admin.post("/search")
 @login_required
+@admin_required
+def search():
+    search = request.form.get("query", "")
+    department = request.form.get("department", "")
+    employment_status = request.form.get("employment_status", "")
+    location = request.form.get("location", "")
+    verified = request.form.get("verified", False)
+    graduation_year = request.form.get("graduation_year", "")
+
+    query = User.query
+
+    if search:
+        query = query.filter(
+            (
+                User.name.ilike(f"%{search}%")
+                | User.email.ilike(f"%{search}%")
+                | User.register_no.ilike(f"%{search}%")
+            )
+        )
+
+    if department:
+        query = query.filter(User.dept == department)
+
+    if employment_status:
+        query = query.filter(User.employment_status == employment_status)
+
+    if location:
+        query = query.filter(User.location == location)
+
+    if verified:
+        query = query.filter(User.approved == True)
+
+    if graduation_year:
+        query = query.filter(User.year == graduation_year)
+
+    # Execute query
+    users = query.all()
+
+    session["users"] = dict((i, users[i].register_no) for i in range(len(users)))
+    return redirect(url_for("admin.dashboard"))
+
+
+@admin.get("/approve/<int:id>")
+@login_required
+@admin_required
+def approve_user(id):
+    user = User.query.filter_by(register_no=id).first()
+    if user:
+        if not user.approved:
+            user.approved = True
+            db.session.commit()
+            flash("User approved", "success")
+            return redirect(url_for("admin.dashboard"))
+        else:
+            flash("User already approved", "danger")
+            return redirect(url_for("admin.dashboard"))
+    flash("User not found", "danger")
+    return redirect(url_for("admin.dashboard"))
+
+
+@admin.get("/reject/<int:id>")
+@login_required
+@admin_required
+def reject_user(id):
+    user = User.query.filter_by(register_no=id).first()
+    if user:
+        if user.approved:
+            user.approved = False
+            db.session.commit()
+            flash("User reject", "success")
+            return redirect(url_for("admin.dashboard"))
+        else:
+            flash("User already reject", "danger")
+            return redirect(url_for("admin.dashboard"))
+    flash("User not found", "danger")
+    return redirect(url_for("admin.dashboard"))
+
+
+@admin.get("/add_users")
+@login_required
+@admin_required
 def add_users():
     csv_path = "/home/maddy/Desktop/PROJECT/Alumni-portal-scratch/app/test/test.csv"
     result = bulk_register_users(csv_path)
@@ -83,34 +180,35 @@ def add_users():
 @admin_required
 def add_event():
     form = EventFrom()
-    if not form.validate_on_submit():
-        flash("Please fill all the fields", "danger")
-        return redirect(url_for("admin.dashboard"))
-    title = form.title.data
-    description = form.description.data
-    expiry_date = form.date.data
-    photo = form.poster.data
-    mine_type = photo.mimetype
-    if not title or not description or not expiry_date:
-        flash("Please fill all the fields", "danger")
+    if form.validate_on_submit():
+        title = form.title.data
+        description = form.description.data
+        expiry_date = form.date.data
+        photo = form.poster.data
+        mime_type = photo.mimetype
+        if not title or not description or not expiry_date:
+            flash("Please fill all the fields", "danger")
+            return redirect(url_for("admin.events"))
+
+        if db.session.query(Event).filter(Event.title == title).first():
+            flash("Event with this title already exists", "danger")
+            return redirect(url_for("admin.events"))
+
+        event = Event(
+            title=title,
+            description=description,
+            expiry_date=expiry_date,
+            poster=photo.read(),
+            mime_type=mime_type,
+        )
+
+        db.session.add(event)
+        db.session.commit()
+        flash("Added succeddfully", "success")
         return redirect(url_for("admin.events"))
 
-    if db.session.query(Event).filter(Event.title == title).first():
-        flash("Event with this title already exists", "danger")
-        return redirect(url_for("admin.dashboard"))
-
-    event = Event(
-        title=title,
-        description=description,
-        expiry_date=expiry_date,
-        poster=photo.read(),
-        mime_type=mine_type,
-    )
-
-    db.session.add(event)
-    db.session.commit()
-    flash("Added succeddfully", "success")
-    return redirect(url_for("admin.dashboard"))
+    flash("Please fill all the fields", "danger")
+    return redirect(url_for("admin.events"))
 
 
 @admin.get("/event/<int:event_id>")
@@ -128,11 +226,11 @@ def delete_event(event_id):
     event = Event.query.filter_by(id=event_id).first()
     if event is None:
         flash("Event not found", "danger")
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("admin.events"))
     db.session.delete(event)
     db.session.commit()
     flash("Event deleted successfully", "success")
-    return redirect(url_for("admin.dashboard"))
+    return redirect(url_for("admin.events"))
 
 
 @admin.post("event-edit/<int:event_id>")
@@ -142,13 +240,12 @@ def edit_event(event_id):
     event = Event.query.filter_by(id=event_id).first()
     if event is None:
         flash("Event not found", "danger")
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("admin.events"))
     form = EventFrom()
     if form.validate_on_submit():
         event.title = form.title.data
         event.description = form.description.data
         event.expiry_date = form.date.data
-        print(form.poster.data)
         if form.poster.data:
             event.poster = form.poster.data.read()
             event.mime_type = form.poster.data.mimetype
@@ -157,13 +254,17 @@ def edit_event(event_id):
             event.mime_type = event.mime_type
         db.session.commit()
         flash("Event updated successfully", "success")
-        return redirect(url_for("admin.dashboard"))
-    return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("admin.events"))
+    return redirect(url_for("admin.events"))
 
 
 @admin.route("/logout")
 @login_required
 @admin_required
 def logout():
+    if (session["next"] if "next" in session else None) == "logout":
+        session["next"] = None
+        return redirect(url_for("user.dash"))
     logout_user()
+    flash("Logged out successfully", "success")
     return redirect(url_for("user.loginpg"))

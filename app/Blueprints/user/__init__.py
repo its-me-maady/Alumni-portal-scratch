@@ -43,7 +43,9 @@ def dash():
     form = ContactForm()
     if not current_user.is_authenticated:
         return redirect(url_for("user.loginpg"))
-    return render_template("userdashboard.html", user=current_user, form=form)
+    if current_user.name == None:
+        return render_template("usercontact.html", user=current_user, form=form)
+    return render_template("userdashboard.html", user=current_user)
 
 
 @user.route("/")
@@ -57,10 +59,14 @@ def loginpg():
             password = form.password.data
             user = User.query.filter_by(register_no=register_no).first()
             if user and user.check_password(password):
+                if not user.approved:
+                    flash("Your account is not approved", "danger")
+                    return redirect(url_for("user.loginpg"))
+                user.last_login = db.func.now()
+                db.session.commit()
                 next = session["next"] if "next" in session else None
                 session["next"] = None
                 login_user(user, remember=True, duration=timedelta(hours=5))
-                print(current_user)
                 return redirect(next or url_for("user.dash"))
             else:
                 flash("Invalid credentials", "danger")
@@ -78,10 +84,13 @@ def loginpg():
 @login_required
 @user_required
 def logout():
-    if session["next"] == "logout":
+    if (session["next"] if "next" in session else None) == "logout":
         session["next"] = None
         return redirect(url_for("user.dash"))
     logout_user()
+    current_user.last_logout = db.func.now()
+    db.session.commit()
+    flash("Logged out successfully", "success")
     return redirect(url_for("user.loginpg"))
 
 
@@ -89,15 +98,24 @@ def logout():
 @login_required
 @user_required
 def mod_profile():
-    name = request.form["name"]
-    query = (
-        db.update(User)
-        .where(User.register_no == current_user.register_no)
-        .values(name=name)
-    )
-    db.session.execute(query)
-    db.session.commit()
-    flash("Added successfully", "success")
+    form = ContactForm()
+    if form.validate_on_submit:
+        current_user.name = form.name.data
+        current_user.email = form.email.data
+        current_user.job = form.job.data
+        current_user.dept = form.dept.data
+        current_user.location = form.location.data
+        current_user.job_status = form.job_status.data
+        current_user.year = form.year.data
+        current_user.whatsapp_no = form.whatsapp_no.data
+        current_user.profile = form.profile.data
+        current_user.mime_type = form.profile.data.mimetype
+        current_user.set_password(form.password.data)
+        db.session.commit()
+        flash("Added successfully", "success")
+        return redirect(url_for("user.dash"))
+
+    flash("Please fill correctly", "danger")
     return redirect(url_for("user.dash"))
 
 

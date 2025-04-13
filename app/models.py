@@ -31,14 +31,17 @@ class User(UserMixin, db.Model):
     register_no = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.String(255), nullable=False)
     job_position = db.Column(db.String(100))
+    employment_status = db.Column(db.String(100))
     year = db.Column(db.Integer)
     dept = db.Column(db.String(100))
     email = db.Column(db.String(120), unique=True)
-    whatsapp_no = db.Column(db.String(20), unique=True)
+    location = db.Column(db.String(120))
+    whatsapp_no = db.Column(db.Integer)
     porfile = db.Column(db.String(255))
     mime_type = db.Column(db.String(50))
-    date_active = db.Column(db.DateTime, default=datetime.utcnow)
-    active_hours = db.Column(db.String(50))
+    approved = db.Column(db.Boolean, default=False)
+    last_login = db.Column(db.DateTime, default=datetime.utcnow)
+    last_logout = db.Column(db.DateTime)
     interested_events = db.relationship(
         "Event",
         secondary=user_event,
@@ -54,9 +57,6 @@ class User(UserMixin, db.Model):
 
     def get_id(self):
         return str(self.register_no)
-
-    def add_user(self, register_no, password):
-        pass
 
 
 class Event(db.Model):

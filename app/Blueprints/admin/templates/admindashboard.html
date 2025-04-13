@@ -1,1 +1,150 @@
-{% extends 'adminbase.html' %}
+{% extends 'adminbase.html' %} 
+
+{% block title %}
+    Admin-Dashboard
+{% endblock %}
+
+{% block body %}
+
+<div class="container mt-4">
+    <h3 class="mb-4">Alumni Search</h3>
+    <form
+        method="post"
+        class="search-form"
+        action="{{url_for('admin.search')}}"
+    >
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <input
+                    type="text"
+                    class="form-control"
+                    name="query"
+                    placeholder="Search by name, email, or registration number..."
+                />
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <select class="form-control" name="graduation_year">
+                    <option value="">Graduation Year</option>
+                    {% for year in range(2025, 2012, -1) %}
+                    <option value="{{ year }}">{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <select class="form-control" name="department">
+                    <option value="">Department</option>
+                    <option value="CSE">Computer Science</option>
+                    <option value="EEE">Electrical And Electronics</option>
+                    <option value="ECE">Electrical And Communications</option>
+                    <option value="ME">Mechanical</option>
+                    <option value="CE">Civil</option>
+                </select>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <select class="form-control" name="employment_status">
+                    <option value="">Employment Status</option>
+                    <option value="employed">Employed</option>
+                    <option value="self_employed">Self Employed</option>
+                    <option value="student">Higher Studies</option>
+                    <option value="unemployed">Unemployed</option>
+                </select>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <input class="form-control" name="location" placeholder="Location" />
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <div class="form-check form-check-inline">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        name="verified"
+                        id="verified"
+                    />
+                    <label class="form-check-label" for="verified"
+                        >Verified Alumni Only</label
+                    >
+                </div>
+                <div class="form-check form-check-inline">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        name="active"
+                        id="active"
+                    />
+                    <label class="form-check-label" for="active"
+                        >Active Members Only</label
+                    >
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">
+                    Search Alumni
+                </button>
+                <a
+                    href="{{url_for('admin.dashboard')}}"
+                    class="btn btn-secondary mx-2"
+                    >Reset Filters</a
+                >
+            </div>
+        </div>
+    </form>
+
+    <div class="search-results mt-4">
+        {% if users %}
+            {% for alumni in users %}
+            <div class="alumni-card">
+                <div class="alumni-info">
+                    <div class="alumni-primary">
+                        <h2>{{alumni.name or 'Unnamed Alumni'}}</h2>
+                        <span class="reg-no">{{alumni.register_no}}</span>
+                    </div>
+                    <div class="alumni-details">
+                        {% if alumni.dept %}
+                        <span class="badge bg-info">{{alumni.dept}}</span>
+                        {% endif %}
+                        {% if alumni.year %}
+                        <span class="badge bg-secondary">{{alumni.year}} Batch</span>
+                        {% endif %}
+                        {% if alumni.employment_status %}
+                        <span class="badge bg-success">{{alumni.employment_status}}</span>
+                        {% endif %}
+                        {% if alumni.location %}
+                        <span class="location"><i class="fas fa-map-marker-alt"></i> {{alumni.location}}</span>
+                        {% endif %}
+                    </div>
+                    {% if alumni.email %}
+                    <div class="alumni-contact">
+                        <i class="fas fa-envelope"></i> {{alumni.email}}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="action-buttons">
+                    {% if alumni.approved %}
+                    <a href="{{url_for('admin.reject_user',id=alumni.register_no)}}" 
+                       class="btn btn-reject">
+                        <i class="fas fa-times-circle mr-1"></i> Reject
+                    </a>
+                    {% else %}
+                    <a href="{{url_for('admin.approve_user',id=alumni.register_no)}}" 
+                       class="btn btn-approve">
+                        <i class="fas fa-check-circle mr-1"></i> Approve
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-center text-muted mt-5">
+                <i class="fas fa-search fa-3x mb-3"></i>
+                <p>No alumni found matching your search criteria</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -35,8 +35,9 @@ class EventFrom(FlaskForm):
 
 class ContactForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
-    job = StringField("Current Job", validators=[DataRequired()])
+    password = PasswordField("New Password", validators=[DataRequired()])
+    job = StringField("Current Job")
+    location = StringField("Location", validators=[Optional()])
     dept = SelectField(
         "Department",
         choices=[
@@ -48,8 +49,28 @@ class ContactForm(FlaskForm):
         ],
         validators=[DataRequired()],
     )
+    job_status = SelectField(
+        "Current status",
+        choices=[
+            ("employed", "Employed"),
+            ("self_employed", "Self Employed"),
+            ("student", "Higher Studies"),
+            ("unemployed", "Unemployed"),
+        ],
+        validators=[DataRequired()],
+    )
     email = StringField("Email", validators=[DataRequired(), Email()])
-    year = IntegerField("Batch", validators=[DataRequired()])
+    year = SelectField(
+        "Graduation Year",
+        choices=list(zip(range(2025, 2012, -1), range(2025, 2012, -1))),
+        validators=[DataRequired()],
+    )
     whatsapp_no = IntegerField("Whatsapp No", validators=[DataRequired()])
-    profile = FileField("Profile Photo", validators=[DataRequired()])
+    profile = FileField(
+        "Profile pic",
+        validators=[
+            FileAllowed(["jpg", "png", "jpeg", "webp"], "Images only!"),
+            Optional(),
+        ],
+    )
     submit = SubmitField("Submit")

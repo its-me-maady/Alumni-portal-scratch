@@ -1,0 +1,125 @@
+{% extends 'userbase.html' %} {% block title %} User-Contacts {% endblock %} {%
+block body %}
+<h1>Please fill the details</h1>
+<form
+    action="{{ url_for('user.mod_profile') }}"
+    method="post"
+    enctype="multipart/form-data"
+    novalidate
+>
+    {{ form.hidden_tag() }}
+    <div class="input-group mb-3">
+        {{ form.profile.label(class="input-group-text") }} {{
+        form.profile(class="form-control") }} {% if form.profile.errors %}
+        <div class="alert alert-danger">
+            {% for error in form.profile.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.name.label(class="form-label") }} {{
+        form.name(class="form-control") }} {% if form.name.errors %}
+        <div class="alert alert-danger">
+            {% for error in form.name.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.job.label(class="form-label") }} {{
+        form.job(class="form-control") }} {% if form.job.errors %}
+        <div class="alert alert-danger">
+            {% for error in form.job.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <span style="font-size: 0.8rem">(Optional)</span>
+    </div>
+    <div class="form-group">
+        {{ form.dept.label(class="form-label") }} {{
+        form.dept(class="form-control") }} {% if form.dept.errors %}
+        <div class="alert alert-danger">
+            {% for error in form.dept.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.location.label(class="form-label") }} {{
+        form.location(class="form-control") }} {% if form.location.errors %}
+        <div class="alert alert-danger">
+            {% for error in form.location.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.job_status.label(class="form-label") }} {{
+        form.job_status(class="form-control") }} {% if form.job_status.errors %}
+        <div class="alert alert-danger">
+            {% for error in form.job_status.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.email.label(class="form-label") }} {{
+        form.email(class="form-control") }} {% if form.email.errors %}
+        <div class="alert alert-danger">
+            {% for error in form.email.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.year.label(class="form-label") }} {{
+        form.year(class="form-control") }} {% if form.year.errors %}
+        <div class="alert alert-danger">
+            {% for error in form.year.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.whatsapp_no.label(class="form-label") }} {{
+        form.whatsapp_no(class="form-control") }} {% if form.whatsapp_no.errors
+        %}
+        <div class="alert alert-danger">
+            {% for error in form.whatsapp_no.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.password.label(class="form-lable") }}
+        <div class="password-container">
+            {{form.password(class="form-control",id="loginpass") }}
+            <button
+                type="button"
+                class="show-password-btn"
+                onclick="togglePassword()"
+            >
+                <i class="far fa-eye" id="togglePassword"></i>
+            </button>
+        </div>
+        {% if form.password.errors %}
+        <div class="alert alert-danger">
+            {% for error in form.password.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {{ form.submit(class="btn btn-primary") }}
+</form>
+{% endblock %}

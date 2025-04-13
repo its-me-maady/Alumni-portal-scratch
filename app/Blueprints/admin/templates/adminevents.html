@@ -1,4 +1,10 @@
-{% extends 'adminbase.html' %} {% block body %}
+{% extends 'adminbase.html' %}
+
+{% block title %}
+    Admin-Events
+{% endblock %}
+
+{% block body %}
 <div class="card-container">
     {% for event in events %}
 

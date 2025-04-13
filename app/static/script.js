@@ -46,3 +46,28 @@ function closeEventDetails() {
     eventDetails.style.display = "none";
     document.body.classList.remove("no-scroll");
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const alerts = document.querySelectorAll(".alert");
+    const ANIMATION_DURATION = 500; // Duration of slide animation in ms
+    const DISPLAY_DURATION = 5000; // How long to show the alert in ms
+
+    alerts.forEach((alert) => {
+        // Add close button to each alert
+        const closeButton = document.createElement("button");
+        closeButton.innerHTML = "&times;";
+        closeButton.className = "alert-close";
+        closeButton.addEventListener("click", () => dismissAlert(alert));
+        alert.appendChild(closeButton);
+
+        // Auto-dismiss after DISPLAY_DURATION
+        setTimeout(() => dismissAlert(alert), DISPLAY_DURATION);
+    });
+
+    function dismissAlert(alert) {
+        alert.classList.add("fade-out");
+        setTimeout(() => {
+            alert.remove();
+        }, ANIMATION_DURATION);
+    }
+});
