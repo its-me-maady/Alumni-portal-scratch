@@ -11,6 +11,7 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired, Email, Optional
 from flask_wtf.file import FileAllowed
+from datetime import datetime
 
 
 class LoginFrom(FlaskForm):
@@ -35,34 +36,45 @@ class EventFrom(FlaskForm):
 
 class ContactForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
-    password = PasswordField("New Password", validators=[DataRequired()])
+    password = PasswordField("New Password")
     job = StringField("Current Job")
     location = StringField("Location", validators=[DataRequired()])
     dept = SelectField(
         "Department",
         choices=[
-            ("CSE", "Computer Science And Engineering"),
-            ("ME", "Mechanical Engineering"),
-            ("CE", "Civil Engineering"),
-            ("EE", "Electrical And Electronics Engineering"),
-            ("EC", "Electronics And Communication Engineering"),
+            ("Computer Science And Engineering", "Computer Science And Engineering"),
+            ("Mechanical Engineering", "Mechanical Engineering"),
+            ("Civil Engineering", "Civil Engineering"),
+            (
+                "Electrical And Electronics Engineering",
+                "Electrical And Electronics Engineering",
+            ),
+            (
+                "Electronics And Communication Engineering",
+                "Electronics And Communication Engineering",
+            ),
         ],
         validators=[DataRequired()],
     )
     job_status = SelectField(
         "Current status",
         choices=[
-            ("employed", "Employed"),
-            ("self_employed", "Self Employed"),
-            ("student", "Higher Studies"),
-            ("unemployed", "Unemployed"),
+            ("Employed", "Employed"),
+            ("Self Employed", "Self Employed"),
+            ("Higher Studies", "Higher Studies"),
+            ("Unemployed", "Unemployed"),
         ],
         validators=[DataRequired()],
     )
     email = StringField("Email", validators=[DataRequired(), Email()])
     year = SelectField(
         "Graduation Year",
-        choices=list(zip(range(2025, 2012, -1), range(2025, 2012, -1))),
+        choices=list(
+            zip(
+                range(datetime.now().year, 2012, -1),
+                range(datetime.now().year, 2012, -1),
+            )
+        ),
         validators=[DataRequired()],
     )
     whatsapp_no = IntegerField("Whatsapp No", validators=[DataRequired()])
@@ -70,6 +82,7 @@ class ContactForm(FlaskForm):
         "Profile pic",
         validators=[
             FileAllowed(["jpg", "png", "jpeg", "webp"], "Images only!"),
+            Optional(),
         ],
     )
     submit = SubmitField("Submit")

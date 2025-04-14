@@ -103,7 +103,7 @@ def logout():
     return redirect(url_for("user.loginpg"))
 
 
-@user.post("/mod_profile")
+@user.route("/mod_profile", methods=["GET", "POST"])
 @login_required
 @user_required
 def mod_profile():
@@ -111,7 +111,7 @@ def mod_profile():
     if form.validate_on_submit():
         current_user.name = form.name.data
         current_user.email = form.email.data
-        current_user.job = form.job.data
+        current_user.job_position = form.job.data
         current_user.dept = form.dept.data
         current_user.location = form.location.data
         current_user.employment_status = form.job_status.data
@@ -119,18 +119,18 @@ def mod_profile():
         current_user.whatsapp_no = form.whatsapp_no.data
         current_user.profile = form.profile.data.read()
         current_user.mime_type = form.profile.data.mimetype
-        current_user.set_password(form.password.data)
-        current_user.date_first_login = (
-            db.func.now()
-            if current_user.date_first_login is None
-            else current_user.date_first_login
-        )
+        if current_user.date_first_login is None:
+            current_user.date_first_login = db.func.now()
+            current_user.set_password(form.password.data)
         current_user.last_login = db.func.now()
         db.session.commit()
         flash("Added successfully", "success")
         return redirect(url_for("user.dash"))
-
-    flash("Please fill correctly", "danger")
+    form.dept.data = current_user.dept
+    form.year.data = str(current_user.year)
+    form.job_status.data = current_user.employment_status
+    if form.errors:
+        flash("Please fill all the required fields", "danger")
     return render_template("usercontact.html", user=current_user, form=form)
 
 
@@ -148,6 +148,14 @@ def events():
 def event(event_id):
     event = Event.query.get_or_404(event_id)
     return Response(event.poster, mimetype=event.mime_type)
+
+
+@user.get("/profile/<int:user_id>")
+@login_required
+@user_required
+def profile(user_id):
+    user = User.query.get_or_404(user_id)
+    return Response(user.profile, mimetype=user.mime_type)
 
 
 @user.get("/event-intersted/<int:event_id>")

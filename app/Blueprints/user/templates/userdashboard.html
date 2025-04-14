@@ -1,5 +1,35 @@
-{% extends "userbase.html" %} {% block title %}User-Dashboard{% endblock %} {%
-block body %}
-<h1>{{ user.name }}</h1>
-<h1>{{ user.email }}</h1>
+{% extends 'userbase.html' %}
+
+{% block title %} User-Dashboard {% endblock %}
+
+{% block body %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h1>Welcome, {{ user.name }}</h1>
+        <p class="profile-subtitle">Here are your details:</p>
+    </div>
+
+    <div class="profile-card">
+        <div class="profile-picture">
+            {% if user.profile %}
+            <img src="{{ url_for('user.profile', user_id=user.register_no) }}" alt="Profile Picture">
+            {% endif %}
+        </div>
+
+        <div class="profile-details">
+            <p><strong>Register Number:</strong> {{ user.register_no }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Job Position:</strong> {{ user.job_position or 'Not specified' }}</p>
+            <p><strong>Employment Status:</strong> {{ user.employment_status or 'Not specified' }}</p>
+            <p><strong>Department:</strong> {{ user.dept }}</p>
+            <p><strong>Year:</strong> {{ user.year }}</p>
+            <p><strong>Location:</strong> {{ user.location or 'Not specified' }}</p>
+            <p><strong>WhatsApp Number:</strong> {{ user.whatsapp_no or 'Not specified' }}</p>
+        </div>
+    </div>
+
+    <div class="profile-actions">
+        <a href="{{ url_for('user.mod_profile') }}" class="btn btn-primary">Edit Profile</a>
+    </div>
+</div>
 {% endblock %}

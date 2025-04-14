@@ -14,7 +14,7 @@ from app.utils import bulk_register_users
 from app.models import User, Event, Admin
 from app.forms import EventFrom
 from functools import wraps
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 admin = Blueprint(
     "admin",
@@ -60,12 +60,23 @@ def dashboard():
     session["users"] = None
     if temp is None:
         users = User.query.all()
-        return render_template("admindashboard.html", user=current_user, users=users)
+        print(list(range(datetime.now().year, 2012, -1)))
+        return render_template(
+            "admindashboard.html",
+            user=current_user,
+            users=users,
+            year_now=list(range(datetime.now().year, 2012, -1)),
+        )
     users = []
     for user in [temp[f"{i}"] for i in range(len(temp))]:
         user = User.query.filter_by(register_no=user).first()
         users.append(user)
-    return render_template("admindashboard.html", user=current_user, users=users)
+    return render_template(
+        "admindashboard.html",
+        user=current_user,
+        users=users,
+        year_now=list(range(datetime.now().year, 2012, -1)),
+    )
 
 
 @admin.get("/events")

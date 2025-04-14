@@ -1,109 +1,41 @@
 {% extends 'userbase.html' %} {% block title %} User-Contacts {% endblock %} {%
 block body %}
-<h1>Please fill the details</h1>
 <form
     action="{{ url_for('user.mod_profile') }}"
     method="post"
     enctype="multipart/form-data"
     novalidate
 >
-    {{ form.hidden_tag() }}
-    <div class="input-group mb-3">
-        {{ form.profile.label(class="input-group-text") }} {{
-        form.profile(class="form-control") }} {% if form.profile.errors %}
-        <div class="alert alert-danger">
-            {% for error in form.profile.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
+    {{ form.hidden_tag() }} {% macro render_field(field, value=None,
+    placeholder=None, optional=False) %}
     <div class="form-group">
-        {{ form.name.label(class="form-label") }} {{
-        form.name(class="form-control") }} {% if form.name.errors %}
-        <div class="alert alert-danger">
-            {% for error in form.name.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.job.label(class="form-label") }} {{
-        form.job(class="form-control") }} {% if form.job.errors %}
-        <div class="alert alert-danger">
-            {% for error in form.job.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-        </div>
-        {% endif %}
+        {{ field.label(class="form-label") }} {{ field(class="form-control",
+        value=value, placeholder=placeholder) }} {% if optional %}
         <span style="font-size: 0.8rem">(Optional)</span>
-    </div>
-    <div class="form-group">
-        {{ form.dept.label(class="form-label") }} {{
-        form.dept(class="form-control") }} {% if form.dept.errors %}
+        {% endif %} {% if field.errors %}
         <div class="alert alert-danger">
-            {% for error in form.dept.errors %}
+            {% for error in field.errors %}
             <span>{{ error }}</span>
             {% endfor %}
         </div>
         {% endif %}
     </div>
+    {% endmacro %}
+    <h1>Please fill the details</h1>
+
+    {{ render_field(form.profile) }} {{ render_field(form.name, value=user.name)
+    }} {{ render_field(form.job, value=user.job_position,
+    placeholder="Optional", optional=True) }} {{ render_field(form.dept,
+    value=user.dept) }} {{ render_field(form.location, value=user.location) }}
+    {{ render_field(form.job_status, value=user.employment_status) }} {{
+    render_field(form.email, value=user.email) }} {{ render_field(form.year,
+    value=user.year) }} {{ render_field(form.whatsapp_no,
+    value=user.whatsapp_no) }} {% if user.date_first_login %} {% else %}
+
     <div class="form-group">
-        {{ form.location.label(class="form-label") }} {{
-        form.location(class="form-control") }} {% if form.location.errors %}
-        <div class="alert alert-danger">
-            {% for error in form.location.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.job_status.label(class="form-label") }} {{
-        form.job_status(class="form-control") }} {% if form.job_status.errors %}
-        <div class="alert alert-danger">
-            {% for error in form.job_status.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.email.label(class="form-label") }} {{
-        form.email(class="form-control") }} {% if form.email.errors %}
-        <div class="alert alert-danger">
-            {% for error in form.email.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.year.label(class="form-label") }} {{
-        form.year(class="form-control") }} {% if form.year.errors %}
-        <div class="alert alert-danger">
-            {% for error in form.year.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.whatsapp_no.label(class="form-label") }} {{
-        form.whatsapp_no(class="form-control") }} {% if form.whatsapp_no.errors
-        %}
-        <div class="alert alert-danger">
-            {% for error in form.whatsapp_no.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.password.label(class="form-lable") }}
+        {{ form.password.label(class="form-label") }}
         <div class="password-container">
-            {{form.password(class="form-control",id="loginpass") }}
+            {{ form.password(class="form-control", id="loginpass") }}
             <button
                 type="button"
                 class="show-password-btn"
@@ -120,6 +52,7 @@ block body %}
         </div>
         {% endif %}
     </div>
-    {{ form.submit(class="btn btn-primary") }}
+    {% endif %} {{ form.submit(class="btn btn-primary") }}
 </form>
+
 {% endblock %}
