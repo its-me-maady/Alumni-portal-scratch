@@ -1,7 +1,9 @@
 from app import db, bcrypt, login
 from datetime import datetime
 from flask_login import UserMixin
-from flask import g
+from datetime import timedelta
+from sqlalchemy.ext.hybrid import hybrid_property
+
 
 user_event = db.Table(
     "user_event",
@@ -39,7 +41,8 @@ class User(UserMixin, db.Model):
     whatsapp_no = db.Column(db.Integer)
     profile = db.Column(db.String(255))
     mime_type = db.Column(db.String(50))
-    approved = db.Column(db.Boolean, default=False)
+    approved = db.Column(db.Boolean, default=True)
+    date_first_login = db.Column(db.DateTime)
     last_login = db.Column(db.DateTime, default=datetime.utcnow)
     last_logout = db.Column(db.DateTime)
     interested_events = db.relationship(
@@ -54,6 +57,23 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
+
+    def calculate_hours_logged(self):
+        if self.last_logout and self.last_logout > self.last_login:
+            duration = self.last_logout - self.last_login
+            return int(round(duration.total_seconds() / 3600, 2))
+        else:
+            return 1
+
+    @hybrid_property
+    def is_active(self):
+        if self.last_login < datetime.utcnow() - timedelta(days=30):
+            return False
+        return True
+
+    @is_active.expression
+    def is_active(cls):
+        return cls.last_login > (datetime.utcnow() - timedelta(days=30))
 
     def get_id(self):
         return str(self.register_no)

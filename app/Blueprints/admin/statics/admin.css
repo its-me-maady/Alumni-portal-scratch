@@ -74,7 +74,7 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    z-index: 2;
+    z-index: 1;
 }
 
 .edit-btn:hover {

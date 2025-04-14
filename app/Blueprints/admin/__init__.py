@@ -89,6 +89,7 @@ def search():
     employment_status = request.form.get("employment_status", "")
     location = request.form.get("location", "")
     verified = request.form.get("verified", False)
+    active = request.form.get("active", False)
     graduation_year = request.form.get("graduation_year", "")
 
     query = User.query
@@ -109,10 +110,13 @@ def search():
         query = query.filter(User.employment_status == employment_status)
 
     if location:
-        query = query.filter(User.location == location)
+        query = query.filter(User.location.ilike(f"%{location}%"))
 
     if verified:
         query = query.filter(User.approved == True)
+
+    if active:
+        query = query.filter(User.is_active == True)
 
     if graduation_year:
         query = query.filter(User.year == graduation_year)
@@ -185,17 +189,25 @@ def bulk_actions():
     if not selected_users:
         flash("No users selected", "error")
         return redirect(url_for("admin.dashboard"))
-
+    actionslen = 0
     for user_id in selected_users:
         user = User.query.filter_by(register_no=user_id).first()
         if user:
             if action == "approve":
-                user.approved = True
+                if user.approved:
+                    pass
+                else:
+                    user.approved = True
+                    actionslen += 1
             elif action == "reject":
-                user.approved = False
-
+                if not user.approved:
+                    pass
+                else:
+                    user.approved = False
+                    actionslen += 1
     db.session.commit()
-    flash(f"Successfully {action}d {len(selected_users)} users", "success")
+    print()
+    flash(f"Successfully {action}d {actionslen} users", "success")
     return redirect(url_for("admin.dashboard"))
 
 

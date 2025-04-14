@@ -130,6 +130,10 @@
                                         {% if alumni.location %}
                                         <span class="location text-muted"><i class="fas fa-map-marker-alt"></i> {{alumni.location}}</span>
                                         {% endif %}
+                                        {% if alumni.last_login %}
+                                        <p class="text-muted mt-3"><small>Last Login: {{alumni.last_login | datetime}}</small></p>
+                                        {% endif %}
+                                        <p class="text-muted"><small>Hours Logged: {{alumni.calculate_hours_logged()}}</small></p>
                                     </div>
                                     {% if alumni.email %}
                                     <p class="alumni-contact mt-2"><i class="fas fa-envelope"></i> {{alumni.email}}</p>

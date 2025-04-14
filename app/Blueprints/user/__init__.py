@@ -68,7 +68,7 @@ def loginpg():
             password = form.password.data
             user = User.query.filter_by(register_no=register_no).first()
             if user and user.check_password(password):
-                if not user.approved:
+                if not user.approved or user.date_first_login:
                     flash("Your account is not approved", "danger")
                     return redirect(url_for("user.loginpg"))
                 user.last_login = db.func.now()
@@ -117,9 +117,15 @@ def mod_profile():
         current_user.employment_status = form.job_status.data
         current_user.year = form.year.data
         current_user.whatsapp_no = form.whatsapp_no.data
-        current_user.profile = form.profile.data
+        current_user.profile = form.profile.data.read()
         current_user.mime_type = form.profile.data.mimetype
         current_user.set_password(form.password.data)
+        current_user.date_first_login = (
+            db.func.now()
+            if current_user.date_first_login is None
+            else current_user.date_first_login
+        )
+        current_user.last_login = db.func.now()
         db.session.commit()
         flash("Added successfully", "success")
         return redirect(url_for("user.dash"))
