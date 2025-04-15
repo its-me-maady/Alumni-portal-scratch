@@ -129,8 +129,7 @@ body {
     background-color: var(--primary-color);
     padding: 0.5rem 1rem;
     border-radius: 4px;
-    left: 100%;
-    transform: translateX(10px);
+    right: 105%;
     white-space: nowrap;
     box-shadow: 0 2px 8px var(--shadow-color);
     opacity: 0;

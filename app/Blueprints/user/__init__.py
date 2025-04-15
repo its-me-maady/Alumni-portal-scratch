@@ -28,6 +28,13 @@ def user_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if isinstance(current_user, User):
+            for i in current_user:
+                if i == None:
+                    form = ContactForm()
+                    flash("Please fill your details", "danger")
+                    return render_template(
+                        "usercontact.html", user=current_user, form=form
+                    )
             return f(*args, **kwargs)
         else:
             flash("You are not authorized to view this page", "danger")
@@ -40,13 +47,8 @@ def user_required(f):
 @login_required
 @user_required
 def dash():
-    form = ContactForm()
     if not current_user.is_authenticated:
         return redirect(url_for("user.loginpg"))
-    for i in current_user:
-        if i == None:
-            flash("Please fill your details", "danger")
-            return render_template("usercontact.html", user=current_user, form=form)
     return render_template("userdashboard.html", user=current_user)
 
 

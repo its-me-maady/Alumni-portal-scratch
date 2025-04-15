@@ -60,7 +60,6 @@ def dashboard():
     session["users"] = None
     if temp is None:
         users = User.query.all()
-        print(list(range(datetime.now().year, 2012, -1)))
         return render_template(
             "admindashboard.html",
             user=current_user,
