@@ -88,7 +88,6 @@ class User(UserMixin, db.Model):
             "email",
             "location",
             "whatsapp_no",
-            "profile",
         ]
         for attr in lst:
             yield getattr(self, attr)

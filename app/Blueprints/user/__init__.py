@@ -2,7 +2,6 @@ from flask import (
     render_template,
     url_for,
     session,
-    request,
     redirect,
     flash,
     Blueprint,
@@ -11,7 +10,7 @@ from flask import (
 from app import db
 from functools import wraps
 from flask_login import login_user, current_user, logout_user, login_required
-from app.models import User, Event
+from app.models import User, Event, Admin
 from app.forms import LoginFrom, ContactForm
 from datetime import timedelta
 
@@ -30,12 +29,9 @@ def user_required(f):
         if isinstance(current_user, User):
             for i in current_user:
                 if i == None:
-                    form = ContactForm()
                     flash("Please fill your details", "danger")
-                    return render_template(
-                        "usercontact.html", user=current_user, form=form
-                    )
-            return f(*args, **kwargs)
+                    return redirect(url_for("user.mod_profile"))
+                return f(*args, **kwargs)
         else:
             flash("You are not authorized to view this page", "danger")
             return redirect(url_for("admin.dashboard"))
@@ -93,7 +89,6 @@ def loginpg():
 
 @user.get("/logout")
 @login_required
-@user_required
 def logout():
     if (session["next"] if "next" in session else None) == "logout":
         session["next"] = None
@@ -107,12 +102,17 @@ def logout():
 
 @user.route("/mod_profile", methods=["GET", "POST"])
 @login_required
-@user_required
 def mod_profile():
+    if isinstance(current_user, Admin):
+        flash("You are not authorized to view this page", "danger")
+        return redirect(url_for("admin.dashboard"))
     form = ContactForm()
     if form.validate_on_submit():
-        current_user.name = form.name.data
+        if User.query.filter_by(email=form.email.data).first():
+            flash("Email already Taken", "danger")
+            return redirect(url_for("user.mod_profile"))
         current_user.email = form.email.data
+        current_user.name = form.name.data
         current_user.job_position = form.job.data
         current_user.dept = form.dept.data
         current_user.location = form.location.data
