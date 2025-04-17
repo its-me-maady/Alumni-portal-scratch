@@ -9,9 +9,21 @@ from wtforms import (
     IntegerField,
     SelectField,
 )
-from wtforms.validators import DataRequired, Email, Optional
+from wtforms.validators import DataRequired, Email, ValidationError, Optional
 from flask_wtf.file import FileAllowed
 from datetime import datetime
+
+
+def file_size_limit(max_mb):
+    def _check_file_size(form, field):
+        if field.data:
+            field.data.stream.seek(0, 2)
+            size = field.data.stream.tell()
+            field.data.stream.seek(0)
+            if size > max_mb * 1024 * 1024:
+                raise ValidationError(f"File is too large. Max size is {max_mb}MB.")
+
+    return _check_file_size
 
 
 class LoginFrom(FlaskForm):
@@ -82,6 +94,7 @@ class ContactForm(FlaskForm):
         "Profile pic",
         validators=[
             FileAllowed(["jpg", "png", "jpeg", "webp"], "Images only!"),
+            file_size_limit(2),
             Optional(),
         ],
     )

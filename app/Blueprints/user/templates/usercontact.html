@@ -5,12 +5,11 @@ block body %}
     method="post"
     enctype="multipart/form-data"
     novalidate
->
-    {{ form.hidden_tag() }}
+>    {{ form.hidden_tag() }}
     <h1>Please fill the details</h1>
     <h1>{{form.name.value}}</h1>
     <div class="form-floating mb-3">
-        {{ form.name(class="form-control",placeholder=form.name.value or "")}}
+        {{ form.name(class="form-control",placeholder='',value=user.name or '' )}}
         {{ form.name.label}} {% if form.name.errors %}
         <div class="alert alert-danger">
             {% for error in form.name.errors %}
@@ -20,8 +19,9 @@ block body %}
         {% endif %}
     </div>
     <div class="form-floating mb-3">
-        {{ form.profile(class="form-control",placeholder=form.profile.value or
-        "")}} {{ form.profile.label}} {% if form.profile.errors %}
+        {{ form.profile(class="form-control")}} {{ form.profile.label}} 
+        <span style="font-size: 0.88rem;margin:1rem">( Max photo size is 2 MB )</span>
+        {% if form.profile.errors %}
         <div class="alert alert-danger">
             {% for error in form.profile.errors %}
             <span>{{ error }}</span>
@@ -30,30 +30,10 @@ block body %}
         {% endif %}
     </div>
     <div class="form-floating mb-3">
-        {{ form.job(class="form-control",placeholder=form.job.value or "")}} {{
+        {{ form.job(class="form-control",placeholder='',value=user.job or "" )}} {{
         form.job.label}} {% if form.job.errors %}
         <div class="alert alert-danger">
             {% for error in form.job.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
-    <div class="form-floating mb-3">
-        {{ form.job(class="form-control",placeholder=form.job.value or "")}} {{
-        form.job.label}} {% if form.job.errors %}
-        <div class="alert alert-danger">
-            {% for error in form.job.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
-    <div class="form-floating mb-3">
-        {{ form.location(class="form-control",placeholder=form.location.value or
-        "")}} {{ form.location.label}} {% if form.location.errors %}
-        <div class="alert alert-danger">
-            {% for error in form.location.errors %}
             <span>{{ error }}</span>
             {% endfor %}
         </div>
@@ -61,8 +41,7 @@ block body %}
     </div>
     <div class="form-floating mb-3">
         {{
-        form.job_status(class="form-control",placeholder=form.job_status.value
-        or "")}} {{ form.job_status.label}} {% if form.job_status.errors %}
+        form.job_status(class="form-control",placeholder='',value=user.employment_status or '' )}} {{ form.job_status.label}} {% if form.job_status.errors %}
         <div class="alert alert-danger">
             {% for error in form.job_status.errors %}
             <span>{{ error }}</span>
@@ -71,7 +50,16 @@ block body %}
         {% endif %}
     </div>
     <div class="form-floating mb-3">
-        {{ form.email(class="form-control",placeholder=form.email.value or "")}}
+        {{ form.location(class="form-control",placeholder='',value=user.location or "" )}} {{ form.location.label}} {% if form.location.errors %}
+        <div class="alert alert-danger">
+            {% for error in form.location.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-floating mb-3">
+        {{ form.email(class="form-control",placeholder='',value=user.email or '' )}}
         {{ form.email.label}} {% if form.email.errors %}
         <div class="alert alert-danger">
             {% for error in form.email.errors %}
@@ -81,7 +69,7 @@ block body %}
         {% endif %}
     </div>
     <div class="form-floating mb-3">
-        {{ form.year(class="form-control",placeholder=form.year.value or "")}}
+        {{ form.year(class="form-control",placeholder='',value=user.year or '' )}}
         {{ form.year.label}} {% if form.year.errors %}
         <div class="alert alert-danger">
             {% for error in form.year.errors %}
@@ -91,8 +79,18 @@ block body %}
         {% endif %}
     </div>
     <div class="form-floating mb-3">
-        {{ form.whatsapp_no(class="form-control",placeholder=form.whatsapp_no.value or
-        "")}} {{ form.whatsapp_no.label}} {% if form.whatsapp_no.errors %}
+        {{ form.dept(class="form-control",placeholder='',value=user.dept or"" )}}
+        {{ form.dept.label}} {% if form.dept.errors %}
+        <div class="alert alert-danger">
+            {% for error in form.dept.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-floating mb-3">
+        {{
+        form.whatsapp_no(class="form-control",placeholder='',value=user.whatsapp_no or"" )}} {{ form.whatsapp_no.label}} {% if form.whatsapp_no.errors %}
         <div class="alert alert-danger">
             {% for error in form.whatsapp_no.errors %}
             <span>{{ error }}</span>
@@ -101,28 +99,23 @@ block body %}
         {% endif %}
     </div>
     {% if user.date_first_login %} {% else %}
-
-    <div class="form-floating mb-3">
-        <div class="password-container">
-            {{ form.password(class="form-control",placeholder="",
-            id="loginpass") }}
-            <button
-                type="button"
-                class="show-password-btn"
-                onclick="togglePassword()"
-            >
-                <i class="far fa-eye" id="togglePassword"></i>
-            </button>
-        </div>
-        {{ form.password.label }} {% if form.password.errors %}
-        <div class="alert alert-danger">
-            {% for error in form.password.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-        </div>
-        {% endif %}
+    <div class="password-container form-floating mb-3">
+       {{ form.password(class="form-control",placeholder="", id="loginpass") }} {{ form.password.label }} {% if form.password.errors %}
+    <div class="alert alert-danger">
+        {% for error in form.password.errors %}
+        <span>{{ error }}</span>
+        {% endfor %}
     </div>
-    {% endif %} {{ form.submit(class="btn btn-primary") }}
+    {% endif %}   <button
+            type="button"
+            class="show-password-btn"
+            onclick="togglePassword()"
+        >
+            <i class="far fa-eye" id="togglePassword"></i>
+        </button>
+    </div>
+    {% endif %}
+    {{ form.submit(class="btn btn-primary") }}
 </form>
 
 {% endblock %}

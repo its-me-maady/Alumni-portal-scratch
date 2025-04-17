@@ -59,7 +59,7 @@ def dashboard():
     temp = session["users"] if "users" in session else None
     session["users"] = None
     if temp is None:
-        users = User.query.all()
+        users = User.query.order_by(User.register_no).all()
         return render_template(
             "admindashboard.html",
             user=current_user,
@@ -132,7 +132,7 @@ def search():
         query = query.filter(User.year == graduation_year)
 
     # Execute query
-    users = query.all()
+    users = query.order_by(User.register_no).all()
 
     session["users"] = dict((i, users[i].register_no) for i in range(len(users)))
     return redirect(url_for("admin.dashboard"))

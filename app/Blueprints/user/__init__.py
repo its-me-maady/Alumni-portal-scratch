@@ -6,6 +6,7 @@ from flask import (
     flash,
     Blueprint,
     Response,
+    request,
 )
 from app import db
 from functools import wraps
@@ -66,7 +67,7 @@ def loginpg():
             password = form.password.data
             user = User.query.filter_by(register_no=register_no).first()
             if user and user.check_password(password):
-                if not user.approved or user.date_first_login:
+                if not user.approved:
                     flash("Your account is not approved", "danger")
                     return redirect(url_for("user.loginpg"))
                 user.last_login = db.func.now()
@@ -108,7 +109,10 @@ def mod_profile():
         return redirect(url_for("admin.dashboard"))
     form = ContactForm()
     if form.validate_on_submit():
-        if User.query.filter_by(email=form.email.data).first():
+        if (
+            User.query.filter_by(email=form.email.data).first()
+            and current_user.email != form.email.data
+        ):
             flash("Email already Taken", "danger")
             return redirect(url_for("user.mod_profile"))
         current_user.email = form.email.data
@@ -132,8 +136,28 @@ def mod_profile():
     form.year.data = str(current_user.year)
     form.job_status.data = current_user.employment_status
     if form.errors:
-        flash("Please fill all the required fields", "danger")
+        flash(f"{form.errors}", "danger")
     return render_template("usercontact.html", user=current_user, form=form)
+
+
+@user.route("/change-password", methods=["GET", "POST"])
+@login_required
+@user_required
+def change_password():
+    if request.method == "POST":
+        if request.form.get("new_password") != request.form.get("confirm_password"):
+            flash("Passwords do not match", "danger")
+            return redirect(url_for("user.change_password"))
+        else:
+            if current_user.check_password(request.form.get("old_password")):
+                current_user.set_password(request.form.get("new_password"))
+                db.session.commit()
+                flash("Password changed successfully", "success")
+                return redirect(url_for("user.dash"))
+            else:
+                flash("Old password is incorrect", "danger")
+                return redirect(url_for("user.change_password"))
+    return render_template("userchangepassword.html", user=current_user)
 
 
 @user.get("/events")
