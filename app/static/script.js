@@ -72,4 +72,15 @@ document.addEventListener("DOMContentLoaded", function () {
             alert.remove();
         }, ANIMATION_DURATION);
     }
+    const trigger = document.getElementById("formPopoverBtn");
+    const content = document.getElementById("popover-form-content").innerHTML;
+
+    const popover = new bootstrap.Popover(trigger, {
+        html: true,
+        sanitize: false,
+        content: content,
+        trigger: "click",
+        placement: "top",
+    });
+
 });

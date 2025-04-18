@@ -30,8 +30,12 @@
                 <select class="form-control" name="department">
                     <option value="">Department</option>
                     <option value="Computer">Computer Science</option>
-                    <option value="Electrical ">Electrical And Electronics</option>
-                    <option value="Communication">Electrical And Communications</option>
+                    <option value="Electrical ">
+                        Electrical And Electronics
+                    </option>
+                    <option value="Communication">
+                        Electrical And Communications
+                    </option>
                     <option value="Mechanical">Mechanical</option>
                     <option value="Civil">Civil</option>
                 </select>
@@ -120,6 +124,14 @@
                 </button>
                 <button
                     type="button"
+                    class="btn btn-primary"
+                    id="formPopoverBtn"
+                >
+                   Download details
+                </button>
+
+                <button
+                    type="button"
                     class="btn btn-danger ms-2"
                     id="bulkReject"
                 >
@@ -127,6 +139,85 @@
                 </button>
             </div>
         </div>
+        <div id="popover-form-content" class="d-none">
+            <form
+                id="popoverForm"
+                class="p-3"
+                method="post"
+                action="{{url_for('admin.download')}}"
+            >
+                <h6 class="mb-3">Select information to download:</h6>
+                <div class="form-check mb-2">
+                    <input
+                        class="form-check-input download-checkbox"
+                        type="checkbox"
+                        name="fields"
+                        value="['name','register_no',email]"
+                        id="basicInfo"
+                    />
+                    <label class="form-check-label" for="basicInfo">
+                        Basic Info (Name, Register No, Email)
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input
+                        class="form-check-input download-checkbox"
+                        type="checkbox"
+                        name="fields"
+                        value="['name',whatsapp_no,email,location]"
+                        id="contactInfo"
+                    />
+                    <label class="form-check-label" for="contactInfo">
+                        Contact Information
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input
+                        class="form-check-input download-checkbox"
+                        type="checkbox"
+                        name="fields"
+                        value="['name','year','dept']"
+                        id="academicInfo"
+                    />
+                    <label class="form-check-label" for="academicInfo">
+                        Academic Details
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input
+                        class="form-check-input download-checkbox"
+                        type="checkbox"
+                        name="fields"
+                        value="['name','current_job',employment_status]"
+                        id="employmentInfo"
+                    />
+                    <label class="form-check-label" for="employmentInfo">
+                        Employment Status
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input
+                        class="form-check-input download-checkbox"
+                        type="checkbox"
+                        name="fields"
+                        value="['name','location']"
+                        id="locationInfo"
+                    />
+                    <label class="form-check-label" for="locationInfo">
+                        Location Details
+                    </label>
+                </div>
+                <button
+                    type="button"
+                    id="popoverFormbtn"
+                    class="btn btn-sm btn-success w-100"
+                    onclick="handlePopoverFormSubmit(event)"
+                >
+                    Start downloading
+                </button>
+            </form>
+        </div>
+
         <form
             id="bulkActionForm"
             method="post"

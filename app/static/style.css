@@ -388,7 +388,6 @@ body {
     max-width: 1200px;
     margin: 90px auto 2rem;
     padding: 0 2rem;
-    min-height: calc(100vh - 160px); /* Account for navbar and footer */
 }
 
 @media (max-width: 768px) {

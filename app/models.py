@@ -9,7 +9,7 @@ from sqlalchemy import desc
 user_event = db.Table(
     "user_event",
     db.Column(
-        "user_id", db.Integer, db.ForeignKey("user.register_no"), primary_key=True
+        "user_id", db.BigInteger, db.ForeignKey("user.register_no"), primary_key=True
     ),
     db.Column("event_id", db.Integer, db.ForeignKey("event.id"), primary_key=True),
 )

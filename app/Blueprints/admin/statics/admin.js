@@ -62,3 +62,43 @@ function submitBulkAction(action) {
     form.appendChild(actionInput);
     form.submit();
 }
+
+async function handlePopoverFormSubmit(e) {
+    e.preventDefault();
+    const selectedFields = [
+        ...document.querySelectorAll(".download-checkbox:checked"),
+    ].map((cb) => cb.value);
+
+    if (selectedFields.length === 0) {
+        alert("Please select at least one category to download");
+        return;
+    }
+
+    const selectedUsers = [
+        ...document.querySelectorAll(".alumni-checkbox:checked"),
+    ].map((cb) => cb.value);
+
+    if (selectedUsers.length === 0) {
+        alert("Please select at least one alumni");
+        return;
+    }
+
+    // Get the form element
+    const form = document.getElementById("popoverForm");
+
+    // Create and append selected users input
+    const usersInput = document.createElement("input");
+    usersInput.type = "hidden";
+    usersInput.name = "selected_users";
+    usersInput.value = JSON.stringify(selectedUsers);
+    form.appendChild(usersInput);
+
+    // Create and append selected fields input
+    const fieldsInput = document.createElement("input");
+    fieldsInput.type = "hidden";
+    fieldsInput.name = "selected_fields";
+    fieldsInput.value = JSON.stringify(selectedFields);
+    form.appendChild(fieldsInput);
+    // Submit the form
+    form.submit();
+}

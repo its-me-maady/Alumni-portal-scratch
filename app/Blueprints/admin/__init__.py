@@ -7,10 +7,11 @@ from flask import (
     flash,
     Blueprint,
     Response,
+    send_file,
 )
 from app import db, login
 from flask_login import login_user, current_user, logout_user, login_required
-from app.utils import bulk_register_users
+from app.utils import bulk_register_users, download_users
 from app.models import User, Event, Admin
 from app.forms import EventFrom
 from functools import wraps
@@ -215,10 +216,32 @@ def bulk_actions():
                 else:
                     user.approved = False
                     actionslen += 1
+
     db.session.commit()
-    print()
     flash(f"Successfully {action}d {actionslen} users", "success")
     return redirect(url_for("admin.dashboard"))
+
+
+@admin.post("/download")
+@login_required
+@admin_required
+def download():
+    selected_users = request.form.get("selected_users")
+    selected_fields = request.form.get("selected_fields")[2:-2]
+    if selected_fields and selected_users:
+        if "all" in selected_fields:
+            return send_file(
+                download_users(selected_users),
+                mimetype="xlsx",
+                as_attachment=True,
+                download_name="Alumni.xlsx",
+            )
+        return send_file(
+            download_users(selected_users, category=selected_fields),
+            mimetype="xlsx",
+            as_attachment=True,
+            download_name="Alumni.xlsx",
+        )
 
 
 @admin.get("/delete-all")

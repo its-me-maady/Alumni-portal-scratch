@@ -1,12 +1,51 @@
-{% extends 'userbase.html' %} 
+{% extends 'userbase.html' %} {% block title %} User-Events {% endblock %} {%
+block body %}
+<div class="container">
+    <div id="pastEventsCarousel" class="carousel slide">
+        <h1>Past Events</h1>
 
-{% block title %}
-    User-Events
-{% endblock %}
-
-
-{% block body %}
-
+        <div class="carousel-inner">
+            {% for past_event in past_events %}
+            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                <a
+                    onclick="showEventDetails(this)"
+                    data-title="{{past_event.title}}"
+                    data-description="{{past_event.description}}"
+                    data-date="{{past_event.expiry_date|datetime}}"
+                    data-image="{{ url_for('user.event', event_id=past_event.id) }}"
+                >
+                    <img
+                        src="{{ url_for('user.event', event_id=past_event.id) }}"
+                        class="d-block w-100"
+                        alt="Past Event"
+                /></a>
+                <div class="carousel-caption">
+                    <h5>{{ past_event.title }}</h5>
+                    <p>{{ past_event.expiry_date|datetime }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#pastEventsCarousel"
+            data-bs-slide="prev"
+        >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#pastEventsCarousel"
+            data-bs-slide="next"
+        >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
 <div class="card-container">
     {% for event in events %}
     <div class="card" id="event-card">
@@ -23,11 +62,8 @@
             <a
                 href="{{ url_for('user.event_interested', event_id=event.id) }}"
                 class="btn btn-primary"
-                >{% if event in user.interested_events %}
-                Not Interested
-                {% else %}
-                Interested
-                {% endif %}</a
+                >{% if event in user.interested_events %} Not Interested {% else
+                %} Interested {% endif %}</a
             ><a
                 class="btn btn-primary mx-2"
                 id="event-box"

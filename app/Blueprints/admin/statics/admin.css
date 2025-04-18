@@ -342,3 +342,20 @@
 .alumni-checkbox:hover {
     border-color: #0a58ca;
 }
+
+#popover-form-content {
+    min-width: 250px;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+#popoverForm .form-check-label {
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+#popoverForm .btn {
+    margin-top: 0.5rem;
+}

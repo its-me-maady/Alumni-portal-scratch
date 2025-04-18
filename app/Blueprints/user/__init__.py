@@ -164,8 +164,12 @@ def change_password():
 @login_required
 @user_required
 def events():
-    events = Event.query.all()
-    return render_template("userevents.html", events=events, user=current_user)
+    events = Event.query.filter(Event.expiry_date > db.func.now()).all()
+    past_events = Event.query.filter(Event.expiry_date < db.func.now()).all()
+
+    return render_template(
+        "userevents.html", events=events, user=current_user, past_events=past_events
+    )
 
 
 @user.get("/event/<int:event_id>")
