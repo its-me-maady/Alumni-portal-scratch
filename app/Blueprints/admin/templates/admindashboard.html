@@ -127,7 +127,7 @@
                     class="btn btn-primary"
                     id="formPopoverBtn"
                 >
-                   Download details
+                    Download details
                 </button>
 
                 <button
@@ -152,7 +152,19 @@
                         class="form-check-input download-checkbox"
                         type="checkbox"
                         name="fields"
-                        value="['name','register_no',email]"
+                        value="all"
+                        id="basicInfo"
+                    />
+                    <label class="form-check-label" for="basicInfo">
+                      All
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input
+                        class="form-check-input download-checkbox"
+                        type="checkbox"
+                        name="fields"
+                        value="'name','register_no','email'"
                         id="basicInfo"
                     />
                     <label class="form-check-label" for="basicInfo">
@@ -164,11 +176,11 @@
                         class="form-check-input download-checkbox"
                         type="checkbox"
                         name="fields"
-                        value="['name',whatsapp_no,email,location]"
+                        value="'name','whatsapp_no','email','location'"
                         id="contactInfo"
                     />
                     <label class="form-check-label" for="contactInfo">
-                        Contact Information
+                        Contact Information (Name, Whatsapp_no,Email, Location)
                     </label>
                 </div>
                 <div class="form-check mb-2">
@@ -176,37 +188,27 @@
                         class="form-check-input download-checkbox"
                         type="checkbox"
                         name="fields"
-                        value="['name','year','dept']"
+                        value="'name','year','dept'"
                         id="academicInfo"
                     />
                     <label class="form-check-label" for="academicInfo">
-                        Academic Details
+                        Academic Details (Name, Year, Department)
                     </label>
                 </div>
-                <div class="form-check mb-2">
+               {% for cat in category %}
+                 <div class="form-check mb-2">
                     <input
                         class="form-check-input download-checkbox"
                         type="checkbox"
                         name="fields"
-                        value="['name','current_job',employment_status]"
-                        id="employmentInfo"
+                        value="{{cat}}"
+                        id="academicInfo"
                     />
-                    <label class="form-check-label" for="employmentInfo">
-                        Employment Status
+                    <label class="form-check-label" for="academicInfo">
+                        {{cat | capitalize}}
                     </label>
                 </div>
-                <div class="form-check mb-3">
-                    <input
-                        class="form-check-input download-checkbox"
-                        type="checkbox"
-                        name="fields"
-                        value="['name','location']"
-                        id="locationInfo"
-                    />
-                    <label class="form-check-label" for="locationInfo">
-                        Location Details
-                    </label>
-                </div>
+               {% endfor %}
                 <button
                     type="button"
                     id="popoverFormbtn"

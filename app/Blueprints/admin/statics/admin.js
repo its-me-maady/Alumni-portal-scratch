@@ -87,18 +87,26 @@ async function handlePopoverFormSubmit(e) {
     const form = document.getElementById("popoverForm");
 
     // Create and append selected users input
-    const usersInput = document.createElement("input");
-    usersInput.type = "hidden";
-    usersInput.name = "selected_users";
-    usersInput.value = JSON.stringify(selectedUsers);
-    form.appendChild(usersInput);
+    selectedUsers.forEach((userId, index) => {
+        const userInput = document.createElement("input");
+        userInput.type = "hidden";
+        userInput.name = "selected_users[]"; // Using array notation in name
+        userInput.value = userId;
+        form.appendChild(userInput);
+    });
 
     // Create and append selected fields input
-    const fieldsInput = document.createElement("input");
-    fieldsInput.type = "hidden";
-    fieldsInput.name = "selected_fields";
-    fieldsInput.value = JSON.stringify(selectedFields);
-    form.appendChild(fieldsInput);
+    selectedFields.forEach((field, index) => {
+        const fieldInput = document.createElement("input");
+        fieldInput.type = "hidden";
+        fieldInput.name = "selected_fields[]"; // Using array notation in name
+        fieldInput.value = field;
+        form.appendChild(fieldInput);
+    });
+
     // Submit the form
     form.submit();
+    setTimeout(() => {
+        window.location.reload();
+    }, 1000);
 }

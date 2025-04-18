@@ -59,6 +59,7 @@ def login():
 def dashboard():
     temp = session["users"] if "users" in session else None
     session["users"] = None
+    column_names = [column.name for column in User.__table__.columns][:10]
     if temp is None:
         users = User.query.order_by(User.register_no).all()
         return render_template(
@@ -66,6 +67,7 @@ def dashboard():
             user=current_user,
             users=users,
             year_now=list(range(datetime.now().year, 2012, -1)),
+            category=column_names,
         )
     users = []
     for user in [temp[f"{i}"] for i in range(len(temp))]:
@@ -76,6 +78,7 @@ def dashboard():
         user=current_user,
         users=users,
         year_now=list(range(datetime.now().year, 2012, -1)),
+        category=column_names,
     )
 
 
@@ -226,21 +229,27 @@ def bulk_actions():
 @login_required
 @admin_required
 def download():
-    selected_users = request.form.get("selected_users")
-    selected_fields = request.form.get("selected_fields")[2:-2]
+    selected_users = request.form.getlist("selected_users[]")
+    selected_fields = []
+    for item in request.form.getlist("selected_fields[]"):
+        cleaned = [i[1:-1] for i in item.split(",")]
+        selected_fields.extend(cleaned)
+
+    selected_fields = list(set(selected_fields))
+    print(selected_fields, selected_users)
     if selected_fields and selected_users:
         if "all" in selected_fields:
             return send_file(
                 download_users(selected_users),
-                mimetype="xlsx",
+                mimetype="text/csv",
                 as_attachment=True,
-                download_name="Alumni.xlsx",
+                download_name="Alumni.csv",
             )
         return send_file(
             download_users(selected_users, category=selected_fields),
-            mimetype="xlsx",
+            mimetype="text/csv",
             as_attachment=True,
-            download_name="Alumni.xlsx",
+            download_name="Alumni.csv",
         )
 
 

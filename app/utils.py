@@ -1,9 +1,8 @@
-from openpyxl import Workbook
-from io import BytesIO
+from io import StringIO, BytesIO
 from app.models import User
 from app import db
 import ast
-
+import csv
 
 def bulk_register_users(csv_path):
     with open(csv_path, "r") as file:
@@ -43,20 +42,15 @@ def download_users(
         "whatsapp_no",
     ],
 ):
-    alumni = ast.literal_eval(alumni)
-    category = ast.literal_eval(category)
     columns = [getattr(User, col) for col in category]
     alumni = (
         User.query.with_entities(*columns).filter(User.register_no.in_(alumni)).all()
     )
     if alumni:
-        wb = Workbook()
-        ws = wb.active
-        ws.title = "alumni"
-        ws.append([cat.capitalize() for cat in category])
+        output = StringIO()
+        ws = csv.writer(output)
+        ws.writerow([cat.capitalize() for cat in category])
         for alumnus in alumni:
-            ws.append(list(alumnus))
-    file_steam = BytesIO()
-    wb.save(file_steam)
-    file_steam.seek(0)
-    return file_steam
+            ws.writerow(list(alumnus))
+    output.seek(0)
+    return BytesIO(output.getvalue().encode("utf-8"))
