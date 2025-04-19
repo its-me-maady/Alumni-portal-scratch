@@ -127,7 +127,7 @@
                 class="event-image"
             />
             <h2 id="event-title"></h2>
-            <p id="event-description"></p>
+            <p class="event-description" id ="event-description"></p>
             <p id="event-date"></p>
             <button
                 type="button"
@@ -155,7 +155,7 @@
             </div>
 
             <div class="form-group">
-                {{ form.description.label(class="form-label" ) }} {{
+                {{ form.description.label(class="form-label event-description" ) }} {{
                 form.description(class="form-control",id
                 ="event-edit-description") }}
             </div>

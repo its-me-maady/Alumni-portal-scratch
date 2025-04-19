@@ -39,12 +39,35 @@
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="navbar-menu">
-                    <a href="{{url_for('user.logout')}}" class="nav-link"
-                        >Logout</a
-                    >
-                    <a href="{{url_for('user.events')}}" class="nav-link"
-                        >Events</a
-                    >
+                   
+                    <div class="profile-dropdown">
+                        <button class="profile-icon">
+                            <img
+                                src="{{ url_for('user.profile', user_id=user.register_no) }}"
+                                alt="Profile Picture"
+                            />
+                        </button>
+                        <div class="dropdown-content">
+                            <a
+                                href="{{url_for('user.logout')}}"
+                                class="dropdown-link"
+                            >
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                            <a
+                                href="{{url_for('user.dash')}}"
+                                class="dropdown-link"
+                            >
+                                <i class="fas fa-user-circle"></i> Dashboard
+                            </a>
+                            <a
+                                href="{{url_for('user.events')}}"
+                                class="dropdown-link"
+                            >
+                                <i class="fas fa-calendar-alt"></i> Events
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 {% endif %}
             </div>

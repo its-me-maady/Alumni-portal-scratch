@@ -69,8 +69,25 @@
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    background-color: var(--background-color);
     color: var(--text-color);
+    position: relative;
+    min-height: 100vh;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/static/img/images.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(8px);
+    z-index: -1;
+    transform: scale(1.1); /* Prevents blur edges from showing */
 }
 
 /* Login styles */
@@ -278,7 +295,9 @@ body {
 
 /* Navbar styles */
 .navbar {
-    background-color: var(--primary-color);
+    background-color: rgba(10, 25, 47, 0.95); /* Semi-transparent primary color */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 1rem 2rem;
     position: fixed;
@@ -386,8 +405,14 @@ body {
 /* Add container styles */
 .container {
     max-width: 1200px;
+    min-height: 100vh;
     margin: 90px auto 2rem;
-    padding: 0 2rem;
+    padding: 3rem;
+    background-color: rgba(255, 255, 255, 0.7); /* Make background semi-transparent */
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 768px) {
@@ -402,7 +427,9 @@ body {
 
 /* Add footer styles */
 .footer {
-    background-color: var(--primary-color);
+    background-color: rgba(10, 25, 47, 0.95); /* Semi-transparent primary color */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     color: white;
     padding: 1.5rem 0;
     text-align: center;
@@ -533,4 +560,31 @@ html {
     border-radius: 8px;
     margin-bottom: 1rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.event-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    margin: 1rem 0;
+    padding: 0.5rem 0;
+    text-align: justify;
+    overflow-wrap: break-word;
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--secondary-color) var(--border-color);
+}
+
+.event-description::-webkit-scrollbar {
+    width: 6px;
+}
+
+.event-description::-webkit-scrollbar-track {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.event-description::-webkit-scrollbar-thumb {
+    background-color: var(--secondary-color);
+    border-radius: 3px;
 }

@@ -9,7 +9,8 @@ from flask import (
     Response,
     send_file,
 )
-from app import db, login
+from app import db
+from sqlalchemy import String, cast
 from flask_login import login_user, current_user, logout_user, login_required
 from app.utils import bulk_register_users, download_users
 from app.models import User, Event, Admin
@@ -113,7 +114,7 @@ def search():
             (
                 User.name.ilike(f"%{search}%")
                 | User.email.ilike(f"%{search}%")
-                | User.register_no.ilike(f"%{search}%")
+                | cast(User.register_no, String).ilike(f"%{search}%")
             )
         )
 

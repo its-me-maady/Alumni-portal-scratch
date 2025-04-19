@@ -29,15 +29,15 @@
             <div class="col-md-3 mb-3">
                 <select class="form-control" name="department">
                     <option value="">Department</option>
-                    <option value="Computer">Computer Science</option>
-                    <option value="Electrical ">
+                    <option value="Computer Science And Engineering">Computer Science</option>
+                    <option value="Electrical And Electronics Engineering ">
                         Electrical And Electronics
                     </option>
-                    <option value="Communication">
+                    <option value="Electronics And Communication Engineering">
                         Electrical And Communications
                     </option>
-                    <option value="Mechanical">Mechanical</option>
-                    <option value="Civil">Civil</option>
+                    <option value="Mechanical Engineering">Mechanical</option>
+                    <option value="Civil Engineering">Civil</option>
                 </select>
             </div>
 
@@ -124,18 +124,17 @@
                 </button>
                 <button
                     type="button"
+                    class="btn btn-danger mx-2"
+                    id="bulkReject"
+                >
+                    Reject Selected
+                </button>
+                <button
+                    type="button"
                     class="btn btn-primary"
                     id="formPopoverBtn"
                 >
                     Download details
-                </button>
-
-                <button
-                    type="button"
-                    class="btn btn-danger ms-2"
-                    id="bulkReject"
-                >
-                    Reject Selected
                 </button>
             </div>
         </div>
@@ -156,7 +155,7 @@
                         id="basicInfo"
                     />
                     <label class="form-check-label" for="basicInfo">
-                      All
+                        All
                     </label>
                 </div>
                 <div class="form-check mb-2">
@@ -195,8 +194,8 @@
                         Academic Details (Name, Year, Department)
                     </label>
                 </div>
-               {% for cat in category %}
-                 <div class="form-check mb-2">
+                {% for cat in category %}
+                <div class="form-check mb-2">
                     <input
                         class="form-check-input download-checkbox"
                         type="checkbox"
@@ -208,7 +207,7 @@
                         {{cat | capitalize}}
                     </label>
                 </div>
-               {% endfor %}
+                {% endfor %}
                 <button
                     type="button"
                     id="popoverFormbtn"
